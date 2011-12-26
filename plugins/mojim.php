@@ -4,7 +4,7 @@
  *
  * @author Ethan Liu
  * @copyright , 25 December, 2011
- * @package plugins
+ * @package plugin
  **/
  
 require_once dirname(__FILE__) . '/../class.curl.php';

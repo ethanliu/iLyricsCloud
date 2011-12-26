@@ -5,7 +5,7 @@
  * @author Ethan Liu
  * @version $Id$
  * @copyright , 26 December, 2011
- * @package default
+ * @package plugin
  **/
 
 function allcdcovers_artwork_hook() {
