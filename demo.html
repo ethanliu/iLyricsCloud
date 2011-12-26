@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>iLyrics demo</title>
+	<meta name="title" content="" />
+	<meta name="Description" content="" />
+	<meta name="Keywords" content="" />
+	<meta name="robots" content="index,follow,archive" />
+	<meta name="Copyright" content="(c) 2011 Creativecrap.com" />
+	<meta name="Author" content="Ethan" />
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<style>
+	body {padding:20px; font: 75% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;}
+	form label {display:inline-block; width:50px;}
+	input, select, button {margin-bottom:5px;}
+	#result-wrapper {position:absolute;top:30px; left:300px;}
+	</style>
+</head>
+<body>
+
+<div id="form-wrapper">
+	<form name="form" method="GET" action="index.php" target="result">
+		<label>Action:</label> <select name="action"><option value="lyrics">lyrics</option><option value="artwork">artwork</option><option value="search">search</option></select><br>
+		<label>Lang:</label> <select name="lang"><option value="en">en</option><option value="ch">ch</option><option value="jp">jp</option></select><br>
+		<label>Title:</label> <input type="text" name="title" value=""><br>
+		<label>Artist:</label> <input type="text" name="artist" value=""><br>
+		<label>Album:</label> <input type="text" name="album" value=""><br>
+		<label></label> <button id="submit">Submit</button><br>
+	</form>
+</div>
+
+<div id="result-wrapper">
+	<iframe name="result" width="600" height="600" style="border:1px solid #333;"></iframe>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+</body>
+</html>
