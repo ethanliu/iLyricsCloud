@@ -22,5 +22,8 @@ function google_artwork_hook($param) {
 	
 	$url = phpQuery::newDocument($html)->find('table.images_table a:first')->attr('href');
 	parse_str(parse_url($url, PHP_URL_QUERY), $args);
+	if (empty($args['imgurl'])) {
+		return '';
+	}
 	return $args['imgurl'];
 }

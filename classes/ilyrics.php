@@ -26,7 +26,7 @@ class LyricsFetcher extends Controller {
 	private $_stripped = FALSE;
 	private $_pages = 1;
 	private $_limited = 10;
-	private $_data = array();
+	private $_data = null;
 
 	public function __construct() {
 		parent::__construct();
@@ -52,7 +52,8 @@ class LyricsFetcher extends Controller {
 	public function output($error = '') {
 		
 		$data = array();
-		if (empty($this->_data)) {
+		//if (empty($this->_data)) {
+		if (!is_array($this->_data)) {
 			if (strlen($this->title.$this->artist.$this->album) > 0) {
 				$data = array(array(
 					'title' => $this->title,
@@ -73,13 +74,18 @@ class LyricsFetcher extends Controller {
 			'result' => $data
 		);
 
-		header("Content-type: application/json");
+		//header("Content-type: application/json");
 		print json_encode($result);
 		exit;
 	}
 	
 	public function artwork() {
 		$this->stripStrings();
+		
+		if ($this->album == '' || $this->artist == '') {
+			return '';
+		}
+		
 		$url = $this->getArtwork();
 		if (empty($url)) {
 			$plugins = explode('|', $this->plugins['artwork']);
@@ -134,7 +140,7 @@ class LyricsFetcher extends Controller {
 	
 	public function search() {
 		if (!$this->db) {
-			return '';
+			return array();
 		}
 		
 		$this->stripStrings();
@@ -168,8 +174,8 @@ class LyricsFetcher extends Controller {
 		$pages = ceil($total / $this->_limited);
 		
 		//$sql = "SELECT id, lang, title, artist, album FROM lyrics WHERE (1=1) " . $query . " LIMIT {$offset}, {$this->_limited}";
-		$sql = "SELECT id, lang, title, artist, album
-				, (SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY id DESC LIMIT 1) AS url
+		$sql = "SELECT id, lang, title, artist, album, lyrics,
+				(SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY id DESC LIMIT 1) AS url
 				FROM lyrics AS l WHERE (1=1) " . $query;
 		$stmt = $this->db_prepare($sql);
 		if (!empty($this->title)) {
@@ -182,6 +188,12 @@ class LyricsFetcher extends Controller {
 			$stmt->bindParam(":album", $this->album);
 		}
 		$result = $this->db_getAll($stmt);
+		
+		for ($i=0, $loop = count($result); $i < $loop; $i++) { 
+			$result[$i]['lyrics'] = str_replace("\n", " ", $result[$i]['lyrics']);
+			$result[$i]['lyrics'] = substr($result[$i]['lyrics'], 0, 80) . '...';
+		}
+		
 		//var_dump($sql);
 		//var_dump($result);
 		
