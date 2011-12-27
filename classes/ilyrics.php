@@ -106,7 +106,7 @@ class LyricsFetcher extends Controller {
 		$this->lyricsSource = $source;
 		$this->stripStrings();
 		
-		if (empty($this->title) || strlen($this->title.$this->artist.$this->album) <= 0) {
+		if (empty($this->title) || strlen($this->artist . $this->album) <= 0) {
 			return;
 		}
 
@@ -248,7 +248,7 @@ class LyricsFetcher extends Controller {
 		else {
 			
 			$query = '';
-			//$query .= ' AND lang LIKE :lang';
+			$query .= ' AND lang LIKE :lang';
 			$query .= !empty($this->title) ? ' AND title LIKE :title' : '';
 			$query .= !empty($this->artist) ? ' AND artist LIKE :artist' : '';
 			$query .= !empty($this->album) ? ' AND album LIKE :album' : '';
@@ -256,7 +256,7 @@ class LyricsFetcher extends Controller {
 			$sql = "SELECT lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
 			//var_dump($sql);
 			$stmt = $this->db_prepare($sql);
-			//$stmt->bindParam(":lang", $this->lyricsSource);
+			$stmt->bindParam(":lang", $this->lyricsSource);
 			
 			if (!empty($this->title)) {
 				$stmt->bindParam(":title", $this->title);
