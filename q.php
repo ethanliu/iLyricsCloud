@@ -6,10 +6,10 @@ $lang = strtolower(@trim($_REQUEST['lang']));
 $key = @trim($_REQUEST['key']);
 
 if (empty($action)) {
-	die('{"error":"Not available1"}');
+	die('{"error":"Not available"}');
 }
 if (empty($lang)) {
-	die('{"error":"Not available2"}');
+	die('{"error":"Not available"}');
 }
 switch ($key) {
 	case 'Y3JlYXRpdmVjcmFwMjU2N2E1ZWM5NzA1ZWI3YWMyYzk4NDAzM2UwNjE4OWQ':
@@ -26,7 +26,7 @@ switch ($key) {
 		break;
 	default:
 		$platform = '';
-		die('{"error":"Not available3", "key":"'.$key.'"}');
+		die('{"error":"Not available"}');
 		break;
 }
 
