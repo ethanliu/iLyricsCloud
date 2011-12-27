@@ -7,7 +7,7 @@
  * @package plugin
  **/
  
-require_once dirname(__FILE__) . '/../class.curl.php';
+require_once dirname(__FILE__) . '/../classes/curl.php';
 function mojim_lyrics_hook($param) {
 	$curl = new CURL();
 	// t2 for album

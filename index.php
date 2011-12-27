@@ -1,5 +1,5 @@
 <?php
-require dirname(__FILE__) . "/class.ilyrics.php";
+require dirname(__FILE__) . "/classes/ilyrics.php";
 
 $test = false;
 //$_REQUEST['action'] = 'lyrics';

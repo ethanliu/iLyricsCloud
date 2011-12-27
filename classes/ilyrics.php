@@ -7,7 +7,7 @@
  * @package class
 **/
 
-require_once dirname(__FILE__) . "/class.controller.php";
+require_once dirname(__FILE__) . "/controller.php";
 
 class LyricsFetcher extends Controller {
 	public $title = '';
@@ -292,7 +292,7 @@ class LyricsFetcher extends Controller {
 		$namespace = explode(':', $namespace);
 		$plugin = $namespace[0];
 		$hook = "_{$namespace[1]}_hook";
-		$path = dirname(__FILE__) . "/plugins/{$plugin}.php";
+		$path = dirname(__FILE__) . "/../plugins/{$plugin}.php";
 		$result = '';
 		if (file_exists($path)) {
 			require_once $path;

@@ -8,7 +8,7 @@
  * @package class
  **/
 
-require_once dirname(__FILE__) . "/config.php";
+require_once dirname(__FILE__) . "/../config.php";
 
 class Controller {
 	public $database = '';
