@@ -1,8 +1,6 @@
 <?php
 require dirname(__FILE__) . "/classes/ilyrics.php";
 
-//$_REQUEST['action'] = 'lyrics';
-//$_REQUEST['key'] = 'web';
 $action = strtolower(@trim($_REQUEST['action']));
 $lang = strtolower(@trim($_REQUEST['lang']));
 $key = strtolower(@trim($_REQUEST['key']));
@@ -17,11 +15,11 @@ switch ($key) {
 	case 'Y3JlYXRpdmVjcmFwMjU2N2E1ZWM5NzA1ZWI3YWMyYzk4NDAzM2UwNjE4OWQ=':
 		$platform = 'web';
 		break;
-	case 'iphone':
-		$platform = 'Y3JlYXRpdmVjcmFwMGIzZjQ1YjI2NmE5N2Q3MDI5ZGRlN2MyYmEzNzIwOTM=';
+	case 'Y3JlYXRpdmVjcmFwMGIzZjQ1YjI2NmE5N2Q3MDI5ZGRlN2MyYmEzNzIwOTM=':
+		$platform = 'iphone';
 		break;
-	case 'ipad':
-		$platform = 'Y3JlYXRpdmVjcmFwMDk0MDFmZGVkNDMzYzM0NzA5ZmQxZjE4NzI3MjgxNjI=';
+	case 'Y3JlYXRpdmVjcmFwMDk0MDFmZGVkNDMzYzM0NzA5ZmQxZjE4NzI3MjgxNjI=':
+		$platform = 'ipad';
 		break;
 	case 'Y3JlYXRpdmVjcmFwOWQyYjFhZDViYmMxNmM0NGQ0OTExNmRjMjEzYzUzZjI=':
 		$platform = 'widget';
