@@ -16,7 +16,7 @@
 	body {padding:20px; font: 75% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;}
 	form label {display:inline-block; width:50px;}
 	input, select, button {margin-bottom:5px;}
-	#result-wrapper {position:absolute;top:30px; left:300px;}
+	#result-wrapper {position:absolute; top:20px; left:300px;}
 	</style>
 </head>
 <body>
@@ -25,7 +25,7 @@
 	<form name="form" method="GET" action="q.php" target="result">
 		<input type="hidden" name="key" value="Y3JlYXRpdmVjcmFwMjU2N2E1ZWM5NzA1ZWI3YWMyYzk4NDAzM2UwNjE4OWQ">
 		<label>Action:</label> <select name="action"><option value="lyrics">lyrics</option><option value="artwork">artwork</option><option value="search">search</option></select><br>
-		<label>Lang:</label> <select name="lang"><option value="en">en</option><option value="ch">ch</option><option value="jp">jp</option></select><br>
+		<label>Lang:</label> <select name="lang"><option value="en">International</option><option value="ch">Mandarin</option><option value="jp">Japanese/Korean</option></select><br>
 		<label>Title:</label> <input type="text" name="title" value=""><br>
 		<label>Artist:</label> <input type="text" name="artist" value=""><br>
 		<label>Album:</label> <input type="text" name="album" value=""><br>
@@ -35,9 +35,8 @@
 
 <div id="result-wrapper">
 	<h2>Console</h2>
-	<iframe name="result" width="600" height="600" src="#" style="border:1px solid #333;"></iframe>
+	<iframe name="result" width="600" height="400" src="#" style="border:1px solid #333;"></iframe>
 </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 </body>
 </html>
