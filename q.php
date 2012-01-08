@@ -46,7 +46,6 @@ switch ($action) {
 		$result = $fetcher->lyrics($lang);
 		$fetcher->output();
 		break;
-
 	case 'artwork':
 		$url = $fetcher->artwork();
 		$result = array(

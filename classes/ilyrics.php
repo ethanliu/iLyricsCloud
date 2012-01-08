@@ -19,7 +19,7 @@ class LyricsFetcher extends Controller {
 	private $plugins = array(
 		'en' => 'lyricswiki:lyrics',
 		'ch' => 'mojim:lyrics',
-		'jp' => 'jpopasia:lyrics|utamap:lyrics',
+		'jp' => 'yahoojp:lyrics|jpopasia:lyrics',//'jpopasia:lyrics|utamap:lyrics',
 		'artwork' => 'google:artwork|kkbox:artwork',
 	);
 
