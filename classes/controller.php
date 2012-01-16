@@ -19,6 +19,33 @@ class Controller {
 		$this->db_connect();
 	}
 
+	// google analytics section
+	public googleAnalyticsGetImageUrl() {
+	    $url = "";
+		if (!defined('GA_PIXEL') || !defined('GA_ACCOUNT')) {
+			return $url;
+		}
+		
+	    $url .= GA_PIXEL . "?";
+	    $url .= "utmac=" . GA_ACCOUNT;
+	    $url .= "&utmn=" . rand(0, 0x7fffffff);
+		
+	    $referer = $_SERVER["HTTP_REFERER"];
+	    $query = $_SERVER["QUERY_STRING"];
+	    $path = $_SERVER["REQUEST_URI"];
+		
+	    if (empty($referer)) {
+	      $referer = "-";
+	    }
+	    $url .= "&utmr=" . urlencode($referer);
+	    if (!empty($path)) {
+	      $url .= "&utmp=" . urlencode($path);
+	    }
+	    $url .= "&guid=ON";
+	    return str_replace("&", "&amp;", $url);		
+	}
+
+	// sqlite section
 	public function db_connect() {
 		if (!empty($this->database) && !$this->db) {
 			$this->db = new PDO($this->database);

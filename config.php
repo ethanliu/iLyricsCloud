@@ -19,6 +19,9 @@ ini_set('auto_detect_line_endings','1');
 set_time_limit(180);
 //@mb_internal_encoding("UTF-8");
 
+define('GA_ACCOUNT', 'MO-402625-5');
+define('GA_PIXEL', 'https://creativecrap.herokuapp.com/qa.php');
+
 define('INSTALLED', true);
 define('DATABASE_DNS', 'sqlite:cache/cache.db');
 //define('DATABASE_DNS', 'pgsql:host=ec2-107-22-193-180.compute-1.amazonaws.com;sslmode=require;port=5432;dbname=rzvwmhytvz;user=rzvwmhytvz;password=;5F4U8FIseOBwN7CZRthj');

@@ -50,7 +50,7 @@ class LyricsFetcher extends Controller {
 	// class interface
 	
 	public function output($error = '') {
-		
+		$gaImageUrl = $this->googleAnalyticsGetImageUrl();
 		$data = array();
 		//if (empty($this->_data)) {
 		if (!is_array($this->_data)) {
@@ -59,7 +59,8 @@ class LyricsFetcher extends Controller {
 					'title' => $this->title,
 					'artist' => $this->artist,
 					'album' => $this->album,
-					'lyrics' => $this->lyrics
+					'lyrics' => $this->lyrics,
+					'ga' => $gaImageUrl
 				));
 			}
 		}
@@ -71,7 +72,8 @@ class LyricsFetcher extends Controller {
 			'error' => $error,
 			'source' => $this->lyricsSource,
 			'pages' => $this->_pages,
-			'result' => $data
+			'result' => $data,
+			'ga' => $gaImageUrl
 		);
 
 		//header("Content-type: application/json");
