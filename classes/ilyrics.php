@@ -72,8 +72,7 @@ class LyricsFetcher extends Controller {
 			'error' => $error,
 			'source' => $this->lyricsSource,
 			'pages' => $this->_pages,
-			'result' => $data,
-			'ga' => $gaImageUrl
+			'result' => $data
 		);
 
 		//header("Content-type: application/json");
