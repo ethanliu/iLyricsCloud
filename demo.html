@@ -19,16 +19,6 @@
 	input, select, button {margin-bottom:5px;}
 	#result-wrapper {position:absolute; top:20px; left:300px;}
 	</style>
-	<script>
-	$(function() {
-		$("#submit").click(function() {
-			var now = new Date();
-			$("#time").val(now.getTime());
-			return true;
-		});
-		
-	});
-	</script>
 </head>
 <body>
 
@@ -41,7 +31,6 @@
 		<label>Artist:</label> <input type="text" name="artist" value=""><br>
 		<label>Album:</label> <input type="text" name="album" value=""><br>
 		<label></label> <button id="submit">Search</button><br>
-		<input type="hidden" name="time" value="" id="time">
 	</form>
 </div>
 
