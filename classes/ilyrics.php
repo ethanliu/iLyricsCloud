@@ -368,33 +368,58 @@ class LyricsFetcher extends Controller {
 	
 	private function removeFeatureString($str) {
 		$patterns = array();
+		$replacements = array();
 		
 		$patterns[] = '/\.mp3|\.wav|\.m4a/i';
-		$patterns[] = '/ featuring .*| ft\. .*| f\. .*| feat .*| ft .*| feat\. .*|\/feat .*| f .*| \[feat\. .*\]| \(feat\. .*\)| \[ft. .*\]/i';
-		$patterns[] = '/ \(.* version\)| \(.* edit\)/i';
-		$patterns[] = '/ (remix)| \(.* remix\)| \(remixed by .*\)| \(acoustic\)| \(.* track\)/i';
+		$replacements[] = '';
+
+		$patterns[] = '/ featuring .*| ft\. .*| f\. .*| feat .*| ft .*| feat\. .*|\/feat .*| f .*| \[feat\. .*\]| \(feat\. .*\)| \[ft. .*\]|\(.* feat .*\)/i';
+		$replacements[] = '';
+
+		$patterns[] = '/ \(.* version\)| \(.* edition\)| \(.* edit\)| ～.* version～/i';
+		$replacements[] = '';
+
+		$patterns[] = '/ \[.* version\]| \[.* edition\]| \[.* edit\]/i';
+		$replacements[] = '';
+
+		$patterns[] = '/ \(remix\)| \(.* remix\)| \(remixed by .*\)| \(acoustic\)| \(.* track\)| \(.* tracks\)/i';
+		$replacements[] = '';
+
+		$patterns[] = '/ \[remix\]| \[.* remix\]| \[remixed by .*\]| \[acoustic\]| \[.* track\]| \[.* tracks\]/i';
+		$replacements[] = '';
+
 		$patterns[] = '/ (live)| \[live\]| - live in .*| \(live in .*\)| \[live in .*\]| - live/i';
-		$patterns[] = '/([0-9]{2})\. |([0-9]{2}) \- |([0-9]{2}) /';
+		$replacements[] = '';
+
+		$patterns[] = '/^([0-9]{1,2})\.+|^([0-9]{1,2}) \- |^([0-9]{1,2}) /';
+		$replacements[] = '';
+
+		$patterns[] = '/\[EP\]|\[CD\/DVD\]|\(CD\/DVD\)|\[Disc.?[0-9]{1,}\]|\(Disc.?[0-9]{1,}\)|Disc.?[0-9]{1,}/i';
+		$replacements[] = '';
+
+		$patterns[] = '/\[soundtrack\]|\(soundtrack\)|\[Original Sound Track\]|\(Original Sound Track\)/i';
+		$replacements[] = '';
+
+		$patterns[] = '/\[instrumental\]|\(instrumental\)| .?instrumental.?| ～Instrumental～/i';
+		$replacements[] = '';
+
+		$patterns[] = '/\[初回盤\]|\(初回盤\)/';
+		$replacements[] = '';
 
 		$patterns[] = '/\/{1,}/';
+		$replacements[] = '/';
+
 		$patterns[] = '/^\//';
+		$replacements[] = '';
+
 		$patterns[] = '/\/$/';
+		$replacements[] = '';
 
 		$patterns[] = '/\s\s+/'; // remove multiple blank spaces,  always be last check
-
-		$replacements = array();
-		$replacements[] = '';
-		$replacements[] = '';
-		$replacements[] = '';
-		$replacements[] = '';
-		$replacements[] = '';
-		$replacements[] = '';
-
-		$replacements[] = '/';
-		$replacements[] = '';
-		$replacements[] = '';
-
 		$replacements[] = ' ';
+
+		$patterns[] = '/(\(\))|(\[\])/'; // remove emtpy () or []
+		$replacements[] = '';
 
 		$str = preg_replace($patterns, $replacements, $str);
 		$str = trim($str);
