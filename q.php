@@ -8,7 +8,7 @@ $key = @trim($_REQUEST['key']);
 if (empty($action)) {
 	die('{"error":"Not available"}');
 }
-if (empty($lang)) {
+if (empty($lang) && $action != 'artwork') {
 	die('{"error":"Not available"}');
 }
 switch ($key) {
