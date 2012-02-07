@@ -27,5 +27,10 @@ function google_artwork_hook($param) {
 	if (empty($args['imgurl'])) {
 		return '';
 	}
+	
+	if (strpos($args['imgurl'], $limit_to_domain) !== false) {
+		return '';
+	}
+	
 	return $args['imgurl'];
 }

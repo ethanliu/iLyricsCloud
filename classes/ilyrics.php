@@ -20,7 +20,7 @@ class LyricsFetcher extends Controller {
 		'en' => 'lyricswiki:lyrics',
 		'zh' => 'mojim:lyrics',
 		'jp' => 'yahoojp:lyrics|jpopasia:lyrics',//'jpopasia:lyrics|utamap:lyrics',
-		'artwork' => 'kkbox:artwork|google:artwork',
+		'artwork' => 'google:artwork|kkbox:artwork',
 	);
 
 	private $_stripped = FALSE;
