@@ -10,10 +10,12 @@
 
 function google_artwork_hook($param) {
 	$image_size = "large"; //can be 'icon' 'small' 'medium' 'large'
-	$limit_to_domain = ""; //"amazon.com"; // 'amazon.com' or 'artistdirect.com'
+	$limit_mode = "e"; // i for include as_sitesearch, e for exclude
+	$limit_to_domain = "imageshack.us"; //"amazon.com"; // 'amazon.com' or 'artistdirect.com'
+
 	$query = urlencode($param['album']) . '%20' . urlencode($param['artist']);
 	$url = "http://images.google.com/images?ie=utf-8&hl=en&btnG=Google+Search";
-	$url .= "&imgsz={$image_size}&as_sitesearch={$limit_to_domain}&q=" . $query;
+	$url .= "&imgsz={$image_size}&as_dt={$limit_mode}&as_sitesearch={$limit_to_domain}&q=" . $query;
 
 	$html = file_get_contents($url);
 	if (empty($html)) {
