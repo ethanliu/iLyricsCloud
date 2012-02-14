@@ -38,7 +38,7 @@ class LyricsModule extends Controller {
 		
 		$offset = ($page - 1) * $this->numberOfRowsPerPage;
 
-		$sql = "SELECT * FROM lyrics ORDER BY created DESC LIMIT {$offset}, {$this->numberOfRowsPerPage}";
+		$sql = "SELECT * FROM lyrics ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
 		$stmt = $this->db_prepare($sql);
 		$result = $this->db_getAll($stmt);
 		return $result;

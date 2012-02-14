@@ -14,7 +14,7 @@ if (empty($result)) {
 	<th>Lyrics</th>
 </tr>
 <?php
-	$fullview = false;
+	$fullview = true;
 	for ($i=0, $loop = count($result); $i < $loop; $i++):
 		$lyrics = ($fullview) ? nl2br($result[$i]['lyrics']) : $result[$i]['lyrics'];
 ?>
