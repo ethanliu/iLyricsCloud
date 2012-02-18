@@ -46,6 +46,10 @@ switch ($action) {
 		$result = $fetcher->lyrics($lang);
 		$fetcher->output();
 		break;
+	case 'news':
+		$result = $fetcher->news();
+		echo json_encode($result);
+		break;
 	case 'artwork':
 		$url = $fetcher->artwork();
 		$result = array(

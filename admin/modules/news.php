@@ -3,17 +3,17 @@
  * 
  *
  * @author Ethan Liu
- * @copyright , 14 February, 2012
+ * @copyright , 19 February, 2012
  **/
 
 require_once dirname(__FILE__) . "/../common.php";
 require_once dirname(__FILE__) . "/../../classes/controller.php";
 
-class LyricsModule extends Controller {
+class NewsModule extends Controller {
 	public $numberOfRowsPerPage = 25;
 	public $numberOfPages = -1;
 	public $numberOfRecords = -1;
-	
+
 	public function __construct() {
 		parent::__construct();
 		if (!empty($this->database) && !INSTALLED) {
@@ -29,49 +29,47 @@ class LyricsModule extends Controller {
 		
 		$offset = ($page - 1) * $this->numberOfRowsPerPage;
 
-		$sql = "SELECT * FROM lyrics ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
+		$sql = "SELECT * FROM news ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
 		$stmt = $this->db_prepare($sql);
 		$result = $this->db_getAll($stmt);
 		return $result;
 	}
-
+	
 	public function edit($id) {
-		$sql = "SELECT * FROM lyrics WHERE id = {$id}";
-		$stmt = $this->db_prepare($sql);
-		$result = $this->db_getRow($stmt);
-		return $result;
+		if (!empty($id)) {
+			$sql = "SELECT * FROM news WHERE id = {$id}";
+			$stmt = $this->db_prepare($sql);
+			$result = $this->db_getRow($stmt);
+			return $result;
+		}
+		return null;
 	}
 	
 	public function update() {
 		$id = intval($_POST['id']);
-		$delete = @intval($_POST['delete']);
-		$lang = trim($_POST['lang']);
-		$title = trim($_POST['title']);
-		$artist = trim($_POST['artist']);
-		$album = trim($_POST['album']);
-		$lyrics = trim($_POST['lyrics']);
-		
-		if ($delete) {
-			$result = $this->delete($id);
+		$created = strtotime(trim($_POST['created']));
+		$news = trim($_POST['news']);
+
+		if (empty($id)) {
+			$sql = "INSERT INTO news (created, news) VALUES (:created, :news)";
+			$stmt = $this->db_prepare($sql);
+			$stmt->bindParam(":created", $created);
+			$stmt->bindParam(":news", $news);
+			$result = $this->db_execute($stmt);
 		}
 		else {
-			$sql = "UPDATE lyrics SET created = :created, lang = :lang, title = :title, artist = :artist, album = :album, lyrics = :lyrics WHERE id = :id";
+			$sql = "UPDATE news SET created = :created, news = :news WHERE id = :id";
 			$stmt = $this->db_prepare($sql);
-			$stmt->bindParam(":created", time());
-			$stmt->bindParam(":lang", $lang);
-			$stmt->bindParam(":title", $title);
-			$stmt->bindParam(":artist", $artist);
-			$stmt->bindParam(":album", $album);
-			$stmt->bindParam(":lyrics", $lyrics);
+			$stmt->bindParam(":created", $created);
+			$stmt->bindParam(":news", $news);
 			$stmt->bindParam(":id", $id);
 			$result = $this->db_execute($stmt);
 		}
-		
 		return $result;
 	}
 	
 	public function numberOfRecords() {
-		$sql = "SELECT COUNT(*) AS total FROM lyrics";
+		$sql = "SELECT COUNT(*) AS total FROM news";
 		$stmt = $this->db_prepare($sql);
 		$this->numberOfRecords = $this->db_getOne($stmt);
 		return $this->numberOfRecords;
@@ -85,11 +83,4 @@ class LyricsModule extends Controller {
 		return $this->numberOfPages;
 	}
 	
-	private function delete($id) {
-		$sql = "DELETE FROM lyrics WHERE id = :id";
-		$stmt = $this->db_prepare($sql);
-		$stmt->bindParam(":id", $id);
-		$result = $this->db_execute($stmt);
-		return $result;
-	}
 }

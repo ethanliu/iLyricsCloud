@@ -23,8 +23,17 @@ switch ($module) {
 		$m = new LyricsModule();
 		break;
 
+	case 'news':
+		include "modules/news.php";
+		$m = new NewsModule();
+		break;
+
 	case 'login':
 		include "modules/login.php";
+		break;
+		
+	case 'install':
+		include "modules/install.php";
 		break;
 	
 	default:
@@ -45,6 +54,10 @@ if ($module == 'dashboard' || empty($module)) {
 	include "views/dashboard-view.php";
 }
 else if ($module == 'login') {
+}
+else if ($module == 'install') {
+	$m = new InstallModule();
+	$m->install();
 }
 else {
 	switch ($action) {

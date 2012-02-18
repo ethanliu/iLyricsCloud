@@ -32,16 +32,7 @@ class LyricsFetcher extends Controller {
 		parent::__construct();
 		//$this->database = (defined('DATABASE_DNS') ? DATABASE_DNS : '');
 		if (!empty($this->database) && !INSTALLED) {
-			$dsn = explode(':', $this->database);
-			switch ($dsn[0]) {
-				case 'sqlite':
-					$this->install_sqlite();
-					break;
-				case 'pgsql':
-					$this->install_postgres();
-					break;
-			}
-			die("Installed success, please update INSTALLED.");
+			$this->output("Run install first.");
 		}
 		
 		$this->db_connect();
@@ -137,7 +128,12 @@ class LyricsFetcher extends Controller {
 		}
 	}
 	
-	// common methods
+	public function news() {
+		$sql = "SELECT created AS id, news FROM news ORDER BY created DESC LIMIT 1";
+		$stmt = $this->db_prepare($sql);
+		$result = $this->db_getRow($stmt);
+		return $result;
+	}
 	
 	public function search() {
 		if (!$this->db) {
@@ -204,6 +200,8 @@ class LyricsFetcher extends Controller {
 		return $result;
 	}
 	
+	// common methods
+
 	private function getArtwork() {
 		if (!$this->db || empty($this->album)) {
 			return '';
@@ -424,83 +422,6 @@ class LyricsFetcher extends Controller {
 		$str = preg_replace($patterns, $replacements, $str);
 		$str = trim($str);
 		return $str;
-	}
-	
-	// database interface
-	
-	private function install_sqlite() {
-		if (file_exists($this->database)) {
-			return;
-		}
-		$this->db = new PDO($this->database);
-		if (!$this->db) {
-			die("Unable to connect database");
-		}
-		else {
-			$sql = 'CREATE TABLE lyrics (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				created INTEGER NOT NULL DEFAULT 0,
-				"lang" VARCHAR,
-				"title" VARCHAR,
-				"artist" VARCHAR,
-				"album" VARCHAR,
-				"lyrics" TEXT);';
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = 'CREATE TABLE artworks (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				created INTEGER NOT NULL DEFAULT 0,
-				"artist" VARCHAR,
-				"album" VARCHAR,
-				"url" TEXT);';
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-		}
-	}
-
-	private function install_postgres() {
-		$this->db = new PDO($this->database);
-		if (!$this->db) {
-			die("Unable to connect database");
-		}
-		else {
-			$sql = "CREATE SEQUENCE lyrics_id_seq;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "CREATE TABLE lyrics (
-					id integer PRIMARY KEY DEFAULT nextval('lyrics_id_seq'),
-					created integer,
-					lang varchar(10) NOT NULL,
-					title varchar(255),
-					artist varchar(255),
-					album varchar(255),
-					lyrics text);";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "ALTER SEQUENCE lyrics_id_seq OWNED BY lyrics.id;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "CREATE SEQUENCE artworks_id_seq;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "CREATE TABLE artworks (
-					id integer PRIMARY KEY DEFAULT nextval('artworks_id_seq'),
-					created integer,
-					artist varchar(255),
-					album varchar(255),
-					url text);";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "ALTER SEQUENCE artworks_id_seq OWNED BY artworks.id;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-		}
 	}
 	
 }

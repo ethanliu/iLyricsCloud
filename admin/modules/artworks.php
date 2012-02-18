@@ -17,16 +17,7 @@ class ArtworksModule extends Controller {
 	public function __construct() {
 		parent::__construct();
 		if (!empty($this->database) && !INSTALLED) {
-			$dsn = explode(':', $this->database);
-			switch ($dsn[0]) {
-				case 'sqlite':
-					$this->install_sqlite();
-					break;
-				case 'pgsql':
-					$this->install_postgres();
-					break;
-			}
-			die("Installed success, please update INSTALLED.");
+			die('Run <a href="?q=install">install</a> database first.');
 		}
 		
 		$this->db_connect();

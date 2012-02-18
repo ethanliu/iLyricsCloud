@@ -14,8 +14,6 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<link rel="stylesheet" href="css/master.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-	<script>
-	</script>
 </head>
 <body>
 
@@ -27,6 +25,8 @@
 			<ul id="main-nav" class="nav">
 				<li><a href="./?q=artworks">Artworks</a></li>
 				<li><a href="./?q=lyrics">Lyrics</a></li>
+				<li><a href="./?q=news">News</a></li>
+				<li><a href="../demo.html">Demo</a></li>
 			</ul>
 			<form class="pull-left">
 				<input type="search" name="search" value="" placeholder="Search">
