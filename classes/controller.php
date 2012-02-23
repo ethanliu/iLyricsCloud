@@ -18,6 +18,10 @@ class Controller {
 		$this->database = (defined('DATABASE_DNS') ? DATABASE_DNS : '');
 		$this->db_connect();
 	}
+	
+	public function debug() {
+		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
 
 	// google analytics section
 	public function googleAnalyticsGetImageUrl() {

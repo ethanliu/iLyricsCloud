@@ -7,6 +7,10 @@
  **/
 
 //error_reporting(E_ALL&~E_NOTICE&~E_WARNING);
+
+//require_once('FirePHPCore/FirePHP.class.php');
+//$firephp = FirePHP::getInstance(true);
+
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 

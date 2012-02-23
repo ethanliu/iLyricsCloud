@@ -145,32 +145,46 @@ class LyricsFetcher extends Controller {
 		$result = array();
 		
 		$query = '';
-		$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
-		$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
-		$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
+		$query .= !empty($this->title) ? ' AND UPPER(l.title) LIKE UPPER(:title)' : '';
+		$query .= !empty($this->artist) ? ' AND UPPER(l.artist) LIKE UPPER(:artist)' : '';
+		$query .= !empty($this->album) ? ' AND UPPER(l.album) LIKE UPPER(:album)' : '';
 		
 		// atleast one condition
 		if (empty($query)) {
 			return $result;
 		}
-		
 		$sql = "SELECT COUNT(*) AS total FROM lyrics AS l WHERE (1=1) " . $query;
 		$stmt = $this->db_prepare($sql);
+		
 		if (!empty($this->title)) {
-			$stmt->bindParam(":title", $this->title);
+			$value = "%" . $this->title . "%";
+			$stmt->bindValue(":title", $value, PDO::PARAM_STR);
 		}
 		if (!empty($this->artist)) {
-			$stmt->bindParam(":artist", $this->artist);
+			$value = "%" . $this->artist . "%";
+			$stmt->bindValue("artist", $value, PDO::PARAM_STR);
 		}
 		if (!empty($this->album)) {
-			$stmt->bindParam(":album", $this->album);
+			$value = "%" . $this->album . "%";
+			$stmt->bindValue("album", $value, PDO::PARAM_STR);
 		}
+
 		$total = $this->db_getOne($stmt);
+		
+		if (empty($total)) {
+			return $result;
+		}
 		
 		$page = empty($_REQUEST['page']) ? 1 : intval($_REQUEST['page']);
 		$offset = abs($page - 1) * $this->_limited;
 		$pages = ceil($total / $this->_limited);
 		
+		
+		$sql = "SELECT l.id, l.lang, l.title, l.artist, l.album, l.lyrics,
+					(SELECT url FROM artworks AS a WHERE UPPER(a.artist) = UPPER(l.artist) AND UPPER(a.album) = UPPER(l.album) ORDER BY a.created DESC LIMIT 1) AS url
+				FROM lyrics AS l
+				WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
+		/*
 		if (!empty($this->album) && !empty($this->artist)) {
 			
 			$query2 = '';
@@ -184,16 +198,20 @@ class LyricsFetcher extends Controller {
 		else {
 			$sql = "SELECT id, lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
 		}
+		*/
 		
 		$stmt = $this->db_prepare($sql);
 		if (!empty($this->title)) {
-			$stmt->bindParam(":title", $this->title);
+			$value = "%" . $this->title . "%";
+			$stmt->bindValue(":title", $value);
 		}
 		if (!empty($this->artist)) {
-			$stmt->bindParam(":artist", $this->artist);
+			$value = "%" . $this->artist . "%";
+			$stmt->bindValue(":artist", $value);
 		}
 		if (!empty($this->album)) {
-			$stmt->bindParam(":album", $this->album);
+			$value = "%" . $this->album . "%";
+			$stmt->bindValue(":album", $value);
 		}
 		$result = $this->db_getAll($stmt);
 		
@@ -337,6 +355,11 @@ class LyricsFetcher extends Controller {
 			$this->title = $this->removeFeatureString($this->title);
 			$this->album = $this->removeFeatureString($this->album);
 			$this->artist = $this->removeFeatureString($this->artist);
+			
+			$this->title = str_replace('%', '\%', $this->title);
+			$this->artist = str_replace('%', '\%', $this->artist);
+			$this->album = str_replace('%', '\%', $this->album);
+			
 		}
 		$this->_stripped = TRUE;
 	}
