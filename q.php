@@ -8,7 +8,7 @@ $key = @trim($_REQUEST['key']);
 if (empty($action)) {
 	die('{"error":"Not available"}');
 }
-if (empty($lang) && $action != 'artwork') {
+if (empty($lang) && $action != 'artwork' && $action != 'news') {
 	die('{"error":"Not available"}');
 }
 switch ($key) {
@@ -31,6 +31,7 @@ switch ($key) {
 }
 
 $fetcher = new LyricsFetcher();
+$fetcher->lyricsId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 $fetcher->title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $fetcher->artist = isset($_REQUEST['artist']) ? $_REQUEST['artist'] : '';
 $fetcher->album = isset($_REQUEST['album']) ? $_REQUEST['album'] : '';

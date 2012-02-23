@@ -21,7 +21,7 @@ class InstallModule extends Controller {
 			echo "There is no DSN information.";
 		}
 		else if (!INSTALLED) {
-			$this->install_heroku(); echo "done."; exit;
+			//$this->install_heroku(); echo "done."; exit;
 			
 			$dsn = explode(':', $this->database);
 			switch ($dsn[0]) {

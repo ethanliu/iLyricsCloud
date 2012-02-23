@@ -45,7 +45,7 @@ class LyricsFetcher extends Controller {
 		$data = array();
 		//if (empty($this->_data)) {
 		if (!is_array($this->_data)) {
-			if (strlen($this->title.$this->artist.$this->album) > 0) {
+			if (strlen($this->title.$this->artist.$this->album) > 0 || !empty($this->lyricsId)) {
 				$data = array(array(
 					'title' => $this->title,
 					'artist' => $this->artist,
@@ -98,13 +98,14 @@ class LyricsFetcher extends Controller {
 		$this->lyricsSource = $source;
 		$this->stripStrings();
 		
-		if (empty($this->title) || strlen($this->artist . $this->album) <= 0) {
+		if ((empty($this->title) || strlen($this->artist . $this->album) <= 0) && empty($this->lyricsId)) {
 			return;
 		}
 
 		if (!empty($this->plugins[$source])) {
 			$this->lyrics = $this->getLyrics();
-			if (empty($this->lyrics)) {
+			
+			if (empty($this->lyrics) && empty($this->lyricsId)) {
 				$plugins = explode('|', $this->plugins[$source]);
 				foreach ($plugins as $plugin) {
 					$this->lyrics = $this->executePlugin($plugin);
