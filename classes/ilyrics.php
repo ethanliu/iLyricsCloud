@@ -171,10 +171,20 @@ class LyricsFetcher extends Controller {
 		$offset = abs($page - 1) * $this->_limited;
 		$pages = ceil($total / $this->_limited);
 		
-		//$sql = "SELECT id, lang, title, artist, album FROM lyrics WHERE (1=1) " . $query . " LIMIT {$offset}, {$this->_limited}";
-		$sql = "SELECT id, lang, title, artist, album, lyrics,
-				(SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY id DESC LIMIT 1) AS url
-				FROM lyrics AS l WHERE (1=1) " . $query;
+		if (!empty($this->album) && !empty($this->artist)) {
+			
+			$query2 = '';
+			$query2 .= !empty($this->artist) ? ' AND artist LIKE :artist' : '';
+			$query2 .= !empty($this->album) ? ' AND album LIKE :album' : '';
+			
+			$sql = "SELECT id, lang, title, artist, album, lyrics,
+					(SELECT url FROM artworks WHERE (1=1) " . $query2 . " ORDER BY id DESC LIMIT 1) AS url
+					FROM lyrics AS l WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
+		}
+		else {
+			$sql = "SELECT id, lang, title, artist, album FROM lyrics WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
+		}
+		
 		$stmt = $this->db_prepare($sql);
 		if (!empty($this->title)) {
 			$stmt->bindParam(":title", $this->title);
