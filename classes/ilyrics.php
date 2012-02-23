@@ -145,9 +145,9 @@ class LyricsFetcher extends Controller {
 		$result = array();
 		
 		$query = '';
-		$query .= !empty($this->title) ? ' AND title LIKE :title' : '';
-		$query .= !empty($this->artist) ? ' AND artist LIKE :artist' : '';
-		$query .= !empty($this->album) ? ' AND album LIKE :album' : '';
+		$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
+		$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
+		$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
 		
 		// atleast one condition
 		if (empty($query)) {
@@ -174,15 +174,15 @@ class LyricsFetcher extends Controller {
 		if (!empty($this->album) && !empty($this->artist)) {
 			
 			$query2 = '';
-			$query2 .= !empty($this->artist) ? ' AND artist LIKE :artist' : '';
-			$query2 .= !empty($this->album) ? ' AND album LIKE :album' : '';
+			$query2 .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
+			$query2 .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
 			
 			$sql = "SELECT id, lang, title, artist, album, lyrics,
 					(SELECT url FROM artworks WHERE (1=1) " . $query2 . " ORDER BY id DESC LIMIT 1) AS url
 					FROM lyrics AS l WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
 		}
 		else {
-			$sql = "SELECT id, lang, title, artist, album FROM lyrics WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
+			$sql = "SELECT id, lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
 		}
 		
 		$stmt = $this->db_prepare($sql);
@@ -218,14 +218,17 @@ class LyricsFetcher extends Controller {
 			return '';
 		}
 		
-		$query = " AND album LIKE :album";
-		$query .= !empty($this->artist) ? " AND artist LIKE :artist" : '';
+		$query = " AND UPPER(album) LIKE UPPER(:album)";
+		$query .= !empty($this->artist) ? " AND UPPER(artist) LIKE UPPER(:artist)" : '';
+
 		$sql = "SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY RANDOM() LIMIT 1";
 		$stmt = $this->db_prepare($sql);
+
 		$stmt->bindParam(":album", $this->album);
 		if (!empty($this->artist)) {
 			$stmt->bindParam(":artist", $this->artist);
 		}
+
 		$result = $this->db_getOne($stmt);
 		return $result;
 	}
@@ -258,10 +261,10 @@ class LyricsFetcher extends Controller {
 		else {
 			
 			$query = '';
-			$query .= ' AND lang LIKE :lang';
-			$query .= !empty($this->title) ? ' AND title LIKE :title' : '';
-			$query .= !empty($this->artist) ? ' AND artist LIKE :artist' : '';
-			$query .= !empty($this->album) ? ' AND album LIKE :album' : '';
+			$query .= ' AND UPPER(lang) LIKE UPPER(:lang)';
+			$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
+			$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
+			$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
 		
 			$sql = "SELECT lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
 			//var_dump($sql);
@@ -364,7 +367,7 @@ class LyricsFetcher extends Controller {
 		// parsing, remove spam text
 		for ($i=0; $i < $loop; $i++) { 
 			$row = trim($rows[$i]);
-			$pattern = '/(document\.write|mojim|\.com|google|script|動態歌詞|友站連結|http:\/\/)/i';
+			$pattern = '/(document\.write|mojim|\.com|google|script|轉載來自|歌詞網 |動態歌詞|友站連結|提供歌詞|修正歌詞|http:\/\/)/i';
 			preg_match($pattern, $row, $matches);
 			if (empty($matches)) {
 				$plaintext[] = $row;
