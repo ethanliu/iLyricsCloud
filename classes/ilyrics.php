@@ -172,6 +172,8 @@ class LyricsFetcher extends Controller {
 		$total = $this->db_getOne($stmt);
 		
 		if (empty($total)) {
+			$this->_pages = 0;
+			$this->_data = $result;
 			return $result;
 		}
 		
