@@ -23,7 +23,7 @@ ini_set('auto_detect_line_endings','1');
 set_time_limit(180);
 //@mb_internal_encoding("UTF-8");
 
-define('GA_ACCOUNT', 'MO-402625-5');
+define('GA_ACCOUNT', 'MO-30101378-1');
 define('GA_PIXEL', 'https://creativecrap.herokuapp.com/qa.php');
 
 define('ADMIN_USER', 'admin');

@@ -129,9 +129,17 @@ class LyricsFetcher extends Controller {
 		}
 	}
 	
-	public function news() {
-		$sql = "SELECT created AS id, news FROM news ORDER BY created DESC LIMIT 1";
+	public function news($category) {
+		if ($category != 'app') {
+			$category = "widget";
+		}
+		
+		$sql = "SELECT created AS id, category, news
+			FROM news
+			WHERE category = :category
+			ORDER BY created DESC LIMIT 1";
 		$stmt = $this->db_prepare($sql);
+		$stmt->bindValue(":category", $category, PDO::PARAM_STR);
 		$result = $this->db_getRow($stmt);
 		return $result;
 	}

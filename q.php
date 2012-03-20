@@ -8,7 +8,7 @@ $key = @trim($_REQUEST['key']);
 if (empty($action)) {
 	die('{"error":"Not available"}');
 }
-if (empty($lang) && $action != 'artwork' && $action != 'news') {
+if (empty($lang) && !in_array($action, array('artwork', 'news'))) {
 	die('{"error":"Not available"}');
 }
 switch ($key) {
@@ -48,7 +48,8 @@ switch ($action) {
 		$fetcher->output();
 		break;
 	case 'news':
-		$result = $fetcher->news();
+		$category = @trim($_REQUEST['cate']);
+		$result = $fetcher->news($category);
 		echo json_encode($result);
 		break;
 	case 'artwork':

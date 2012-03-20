@@ -26,11 +26,18 @@
       chr(0x02), chr(0x44), chr(0x01), chr(0x00), chr(0x3b)
   );
 
+  
   // The last octect of the IP address is removed to anonymize the user.
-  function getIP($remoteAddress) {
-    if (empty($remoteAddress)) {
-      return "";
-    }
+  function getIP() {
+	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+		$remoteAddress = $_SERVER['HTTP_CLIENT_IP'];
+	}
+	else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		$remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	else {
+		$remoteAddress = $_SERVER['REMOTE_ADDR'];
+	}
 
     // Capture the first three octects of the IP address and replace the forth
     // with 0, e.g. 124.455.3.123 becomes 124.455.3.0
@@ -169,7 +176,7 @@
         "&utmac=" . $account .
         "&utmcc=__utma%3D999.999.999.999.999.1%3B" .
         "&utmvid=" . $visitorId .
-        "&utmip=" . getIP($_SERVER["REMOTE_ADDR"]);
+        "&utmip=" . getIP();
 
     sendRequestToGoogleAnalytics($utmUrl);
 

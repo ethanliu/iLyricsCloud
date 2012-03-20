@@ -48,19 +48,22 @@ class NewsModule extends Controller {
 	public function update() {
 		$id = intval($_POST['id']);
 		$created = strtotime(trim($_POST['created']));
+		$category = $_POST['category'];
 		$news = trim($_POST['news']);
 
 		if (empty($id)) {
-			$sql = "INSERT INTO news (created, news) VALUES (:created, :news)";
+			$sql = "INSERT INTO news (created, category, news) VALUES (:created, :category, :news)";
 			$stmt = $this->db_prepare($sql);
 			$stmt->bindParam(":created", $created);
+			$stmt->bindParam(":category", $category);
 			$stmt->bindParam(":news", $news);
 			$result = $this->db_execute($stmt);
 		}
 		else {
-			$sql = "UPDATE news SET created = :created, news = :news WHERE id = :id";
+			$sql = "UPDATE news SET created = :created, category = :category, news = :news WHERE id = :id";
 			$stmt = $this->db_prepare($sql);
 			$stmt->bindParam(":created", $created);
+			$stmt->bindParam(":category", $category);
 			$stmt->bindParam(":news", $news);
 			$stmt->bindParam(":id", $id);
 			$result = $this->db_execute($stmt);

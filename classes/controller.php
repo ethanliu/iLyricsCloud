@@ -35,26 +35,29 @@ class Controller {
 		$url .= "&utmn=" . rand(0, 0x7fffffff);
 
 		$referer = @$_SERVER["HTTP_REFERER"];
-		//$query = $_SERVER["QUERY_STRING"];
-		//$path = $_SERVER["REQUEST_URI"];
-		$path = @$_SERVER["PHP_SELF"];
-	
-		$param = array();
-		foreach ($_REQUEST as $key => $value) {
-			if (!($key == 'key' || $key == 'time')) {
-				$param[] = $key . '=' . $value;
-			}
-		}
-		$path = $path . '?' . implode('&', $param);
+		$query = $_SERVER["QUERY_STRING"];
+		$path = $_SERVER["REQUEST_URI"];
+
+		//$path = @$_SERVER["PHP_SELF"];
+		//$param = array();
+		//foreach ($_REQUEST as $key => $value) {
+		//	if (!($key == 'key' || $key == 'time')) {
+		//		$param[] = $key . '=' . $value;
+		//	}
+		//}
+		//$path = $path . '?' . implode('&', $param);
 		
 		if (empty($referer)) {
 			$referer = "-";
 		}
 		$url .= "&utmr=" . urlencode($referer);
+		
 		if (!empty($path)) {
 			$url .= "&utmp=" . urlencode($path);
 		}
+		
 		$url .= "&guid=ON";
+		
 		return str_replace("&", "&amp;", $url);		
 	}
 

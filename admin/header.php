@@ -26,7 +26,7 @@
 				<li><a href="./?q=artworks">Artworks</a></li>
 				<li><a href="./?q=lyrics">Lyrics</a></li>
 				<li><a href="./?q=news">News</a></li>
-				<li><a href="../demo.html">Demo</a></li>
+				<li><a href="../demo.html" target="_blank">Demo</a></li>
 			</ul>
 			<form class="pull-left">
 				<input type="search" name="search" value="" placeholder="Search">

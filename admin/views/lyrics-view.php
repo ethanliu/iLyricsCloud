@@ -30,7 +30,7 @@ if (empty($result)) {
 		<p><?php echo $result[$i]['artist']; ?></p>
 		<p><?php echo $result[$i]['album']; ?></p>
 	</td>
-	<td><div class=""><?php echo $lyrics; ?></div></td>
+	<td><div class=""><?php echo mb_substr($lyrics, 0, 100); ?></div></td>
 </tr>
 <?php endfor; ?>
 </table>

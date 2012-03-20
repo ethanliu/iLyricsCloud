@@ -1,9 +1,8 @@
 <?php
 /**
- * 
+ * Database Installer
  *
  * @author Ethan Liu
- * @version $Id$
  * @copyright , 19 February, 2012
  * @package default
  **/
@@ -21,8 +20,6 @@ class InstallModule extends Controller {
 			echo "There is no DSN information.";
 		}
 		else if (!INSTALLED) {
-			//$this->install_heroku(); echo "done."; exit;
-			
 			$dsn = explode(':', $this->database);
 			switch ($dsn[0]) {
 				case 'sqlite':
@@ -37,6 +34,8 @@ class InstallModule extends Controller {
 			echo "Installed success, please update INSTALLED from config.php.";
 		}
 		else {
+			echo "append....";
+			$this->install_heroku();
 			echo "Database already installed.";
 		}
 		//$this->db_connect();
@@ -74,6 +73,7 @@ class InstallModule extends Controller {
 			$sql = 'CREATE TABLE news (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				created INTEGER NOT NULL DEFAULT 0,
+				"category" VARCHAR,
 				"news" TEXT);';
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
@@ -129,6 +129,7 @@ class InstallModule extends Controller {
 			$sql = "CREATE TABLE news (
 					id integer PRIMARY KEY DEFAULT nextval('news_id_seq'),
 					created integer,
+					category varchar(20),
 					news text);";
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
@@ -141,18 +142,7 @@ class InstallModule extends Controller {
 	
 	// temp use only, for adding missing database to heroku
 	private function install_heroku() {
-		$sql = "CREATE SEQUENCE news_id_seq;";
-		$stmt = $this->db_prepare($sql);
-		$this->db_execute($stmt);
-
-		$sql = "CREATE TABLE news (
-				id integer PRIMARY KEY DEFAULT nextval('news_id_seq'),
-				created integer,
-				news text);";
-		$stmt = $this->db_prepare($sql);
-		$this->db_execute($stmt);
-
-		$sql = "ALTER SEQUENCE news_id_seq OWNED BY news.id;";
+		$sql = "ALTER TABLE news ADD COLUMN category varchar(20);";
 		$stmt = $this->db_prepare($sql);
 		$this->db_execute($stmt);
 	}

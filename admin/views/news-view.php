@@ -4,6 +4,7 @@
 	<th>ID</th>
 	<th>Time</th>
 	<th>Serial</th>
+	<th>Category</th>
 	<th>News</th>
 </tr>
 <?php
@@ -15,8 +16,9 @@
 		<a href="?q=news&action=edit&id=<?php echo $result[$i]['id']; ?>" class="btn">Edit</a>
 	</td>
 	<td width="10%"><?php echo $result[$i]['id']; ?></td>
-	<td width="20%" nowrap><?php echo _time($result[$i]['created']); ?></td>
-	<td width="15%" nowrap><?php echo $result[$i]['created']; ?></td>
+	<td width="15%" nowrap><?php echo _time($result[$i]['created']); ?></td>
+	<td width="10%" nowrap><?php echo $result[$i]['created']; ?></td>
+	<td width="10%" nowrap><?php echo $result[$i]['category']; ?></td>
 	<td><?php echo $result[$i]['news']; ?></td>
 </tr>
 <?php endfor; ?>
