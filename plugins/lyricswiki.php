@@ -8,6 +8,8 @@
  **/
 
 function lyricswiki_lyrics_hook($param) {
+	//http://lyrics.wikia.com/index.php?action=edit
+
 	//http://lyrics.wikia.com/api.php?artist=Cake&song=Dime&fmt=xml
 	//fmt: text,xml,html,fixXML,json
 

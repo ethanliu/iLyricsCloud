@@ -326,6 +326,26 @@ class LyricsFetcher extends Controller {
 		return $result['lyrics'];
 	}
 	
+	// for migration
+	public function saveLyrics($lyrics) {
+		if (empty($lyrics)) {
+			$this->lyrics = 'empty lyrics';
+			return;
+		}
+		
+		$this->stripStrings();
+		$txt = $this->getLyrics();
+		
+		if (!empty($txt)) {
+			$this->lyrics = 'exists';
+			return;
+		}
+
+		$this->lyrics = $lyrics;
+		$this->parsing();
+		$this->setLyrics();
+	}
+	
 	private function setLyrics() {
 		if (!$this->db) {
 			return '';
