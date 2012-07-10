@@ -64,7 +64,17 @@ class Controller {
 	// sqlite section
 	public function db_connect() {
 		if (!empty($this->database) && !$this->db) {
-			$this->db = new PDO($this->database);
+			$username = '';
+			$password = '';
+
+			if (preg_match('/user=([^;]*);/', $this->database, $matches)) {
+				$username = $matches[1];
+			}
+			if (preg_match('/password=([^;]*);/', $this->database, $matches)) {
+				$password = $matches[1];
+			}
+			
+			$this->db = new PDO($this->database, $username, $password);
 		}
 	}
 
@@ -73,7 +83,7 @@ class Controller {
 			$stmt = $this->db->prepare($sql);
 			if (!$stmt) {
 				$error = $this->db->errorInfo();
-				die("Error: " . $error[2]);
+				die("Error (1): " . $error[2]);
 				return FALSE;
 			}
 			return $stmt;
@@ -86,7 +96,7 @@ class Controller {
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Statement Error: " . $error[2]);
+				die("Error (2): " . $error[2]);
 				return FALSE;
 			}
 			$result = $statement->fetch();
@@ -99,7 +109,7 @@ class Controller {
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Error: " . $error[2]);
+				die("Error (3): " . $error[2]);
 				return FALSE;
 			}
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -112,7 +122,7 @@ class Controller {
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Error: " . $error[2]);
+				die("Error (4): " . $error[2]);
 				return FALSE;
 			}
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -125,7 +135,7 @@ class Controller {
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Error: " . $error[2]);
+				die("Error (5): " . $error[2]);
 				return FALSE;
 			}
 			return TRUE;

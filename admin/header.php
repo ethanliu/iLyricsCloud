@@ -20,7 +20,7 @@
 <div class="topbar">
 	<div class="fill">
 		<div class="container">
-			<a class="brand" href="./">iLyrics Cloud Admin</a>
+			<a class="brand" href="./">iLyrics Cloud</a>
 			<?php if (isset($_SESSION['login_id']) && $_SESSION['login_id']):?>
 			<ul id="main-nav" class="nav">
 				<li><a href="./?q=artworks">Artworks</a></li>
@@ -29,7 +29,8 @@
 				<li><a href="../demo.html" target="_blank">Demo</a></li>
 			</ul>
 			<form class="pull-left">
-				<input type="search" name="search" value="" placeholder="Search">
+				<input type="hidden" name="q" value="<?php echo $module; ?>">
+				<input type="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search">
 			</form>
 			<p class="pull-right"><a href="./login.php?q=logout">Logout</a></p>
 			<?php endif;?>

@@ -20,7 +20,7 @@ if (empty($result)) {
 ?>
 <tr>
 	<td>
-		<a href="?q=lyrics&action=edit&id=<?php echo $result[$i]['id']; ?>" class="btn">Edit</a>
+		<a href="?q=<?php echo $module; ?>&action=edit&id=<?php echo $result[$i]['id']; ?>&page=<?php echo $page; ?>&search=<?php echo urlencode($search); ?>" class="btn">Edit</a>
 	</td>
 	<td><?php echo $result[$i]['id']; ?></td>
 	<td nowrap><?php echo _time($result[$i]['created']); ?></td>
@@ -43,7 +43,7 @@ if (empty($result)) {
 		</form>
 	</div>
 	<div align="left">
-		<a href="?q=lyrics&page=<?php echo $page-1; ?>" class="btn">Prev</a>
-		<a href="?q=lyrics&page=<?php echo $page+1; ?>" class="btn">Next</a>
+		<?php if ($pages > 1 && $page != 1): ?><a href="?q=<?php echo $module; ?>&page=<?php echo $page-1; ?>&search=<?php echo urlencode($search); ?>" class="btn">Prev</a><?php endif; ?>
+		<?php if ($pages > 1 && $page != $pages): ?><a href="?q=<?php echo $module; ?>&page=<?php echo $page+1; ?>&search=<?php echo urlencode($search); ?>" class="btn">Next</a><?php endif; ?>
 	</div>
 </div>

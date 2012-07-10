@@ -7,10 +7,12 @@
  **/
 
 include "common.php";
-include "header.php";
 
 $module = trim($_REQUEST['q']);
+$search = trim($_REQUEST['search']);
 $action = trim($_REQUEST['action']);
+
+include "header.php";
 
 switch ($module) {
 	case 'artworks':

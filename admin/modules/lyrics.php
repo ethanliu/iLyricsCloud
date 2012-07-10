@@ -26,11 +26,26 @@ class LyricsModule extends Controller {
 	public function records($page = 1) {
 		$pages = $this->numberOfPages;
 		$page = ($page > $pages) ? $pages : (($page < 1) ? 1 : $page);
+		$offset = ($page - 1 < 0) ? 0 : ($page - 1) * $this->numberOfRowsPerPage;
 		
-		$offset = ($page - 1) * $this->numberOfRowsPerPage;
+		$query = '';
+		$search = !empty($_REQUEST['search']) ? trim($_REQUEST['search']) : '';
+		if ($search) {
+			//$query .= " AND ( UPPER(title) LIKE UPPER(CONCAT('%', :search, '%'))";
+			//$query .= " OR UPPER(artist) LIKE UPPER(CONCAT('%', :search, '%'))";
+			//$query .= " OR UPPER(album) LIKE UPPER(CONCAT('%', :search, '%')) )";
+			$query .= " AND ( UPPER(title) LIKE UPPER(:search)";
+			$query .= " OR UPPER(artist) LIKE UPPER(:search)";
+			$query .= " OR UPPER(album) LIKE UPPER(:search) )";
+		}
 
-		$sql = "SELECT * FROM lyrics ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
+		$sql = "SELECT * FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
 		$stmt = $this->db_prepare($sql);
+
+		if (!empty($query)) {
+			$stmt->bindParam(":search", $search);
+		}
+
 		$result = $this->db_getAll($stmt);
 		return $result;
 	}
@@ -71,8 +86,24 @@ class LyricsModule extends Controller {
 	}
 	
 	public function numberOfRecords() {
-		$sql = "SELECT COUNT(*) AS total FROM lyrics";
+		$query = '';
+		$search = !empty($_REQUEST['search']) ? trim($_REQUEST['search']) : '';
+		if ($search) {
+			//$query .= " AND ( UPPER(title) LIKE UPPER(CONCAT('%', :search, '%'))";
+			//$query .= " OR UPPER(artist) LIKE UPPER(CONCAT('%', :search, '%'))";
+			//$query .= " OR UPPER(album) LIKE UPPER(CONCAT('%', :search, '%')) )";
+			$query .= " AND ( UPPER(title) LIKE UPPER(:search)";
+			$query .= " OR UPPER(artist) LIKE UPPER(:search)";
+			$query .= " OR UPPER(album) LIKE UPPER(:search) )";
+		}
+		
+		$sql = "SELECT COUNT(*) AS total FROM lyrics WHERE (1=1) " . $query;
 		$stmt = $this->db_prepare($sql);
+		
+		if (!empty($query)) {
+			$stmt->bindParam(":search", $search);
+		}
+		
 		$this->numberOfRecords = $this->db_getOne($stmt);
 		return $this->numberOfRecords;
 	}

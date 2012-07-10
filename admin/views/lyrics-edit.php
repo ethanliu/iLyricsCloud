@@ -8,6 +8,8 @@ if (empty($result)) {
 <input type="hidden" name="q" value="lyrics">
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="id" value="<?php echo $result['id']; ?>">
+<input type="hidden" name="search" value="<?php echo htmlspecialchars($search);?>">
+<input type="hidden" name="page" value="<?php echo @intval($_REQUEST['page']);?>">
 
 <div class="clearfix">
 	<label>Lang</label>

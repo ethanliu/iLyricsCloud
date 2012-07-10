@@ -30,6 +30,10 @@ class InstallModule extends Controller {
 					$this->install_postgres();
 					echo "Install Postgres.<br>";
 					break;
+				case 'mysql':
+					$this->install_mysql();
+					echo "Install Mysql.<br>";
+					break;
 			}
 			echo "Installed success, please update INSTALLED from config.php.";
 		}
@@ -78,6 +82,49 @@ class InstallModule extends Controller {
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
 		}
+	}
+	
+	private function install_mysql() {
+		//$this->db = new PDO($this->database);
+		if (!$this->db) {
+			die("Unable to connect database");
+		}
+
+		$sql = "CREATE TABLE IF NOT EXISTS `lyrics` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`created` int(11) NOT NULL,
+				`lang` varchar(10) NOT NULL,
+				`title` varchar(255) NOT NULL,
+				`artist` varchar(255) NOT NULL,
+				`album` varchar(255) NOT NULL,
+				`lyrics` text NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		$stmt = $this->db_prepare($sql);
+		$this->db_execute($stmt);
+		
+		$sql = "CREATE TABLE IF NOT EXISTS `artworks` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`created` int(11) NOT NULL,
+				`artist` varchar(255) NOT NULL,
+				`album` varchar(255) NOT NULL,
+				`url` text NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		$stmt = $this->db_prepare($sql);
+		$this->db_execute($stmt);
+		
+
+		$sql = "CREATE TABLE IF NOT EXISTS `news` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`created` int(11) NOT NULL,
+				`category` varchar(20) NOT NULL,
+				`news` text NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		$stmt = $this->db_prepare($sql);
+		$this->db_execute($stmt);
+
 	}
 
 	private function install_postgres() {

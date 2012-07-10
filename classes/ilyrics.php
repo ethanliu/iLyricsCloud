@@ -329,18 +329,58 @@ class LyricsFetcher extends Controller {
 	// for migration
 	public function saveLyrics($lyrics) {
 		if (empty($lyrics)) {
-			$this->lyrics = 'empty lyrics';
+			$this->lyrics = '';
 			return;
 		}
 		
 		$this->stripStrings();
-		$txt = $this->getLyrics();
-		
-		if (!empty($txt)) {
-			$this->lyrics = 'exists';
+		//$txt = $this->getLyrics();
+		$this->title = stripslashes($this->title);
+		$this->artist = stripslashes($this->artist);
+		$this->album = stripslashes($this->album);
+
+		if (empty($this->title) || empty($this->artist)) {
 			return;
 		}
 
+		$query = ' lang LIKE "' . $this->lyricsSource . '"';
+		$query .= ' AND UPPER(CONCAT(title, artist)) LIKE :search';
+		$sql = "SELECT id FROM lyrics WHERE " . $query . " ORDER BY created DESC LIMIT 1";
+		$stmt = $this->db_prepare($sql);
+		$stmt->bindParam(":search", strtoupper($this->title . $this->artist));
+		$result = $this->db_getOne($stmt);
+
+		if (!empty($result)) {
+			return;
+		}
+
+		/*
+		$query = '';
+		$query .= ' AND UPPER(lang) LIKE UPPER(:lang)';
+		$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
+		$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
+		$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
+		
+		$sql = "SELECT id FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
+		$stmt = $this->db_prepare($sql);
+		$stmt->bindParam(":lang", $this->lyricsSource);
+			
+		if (!empty($this->title)) {
+			$stmt->bindParam(":title", $this->title);
+		}
+		if (!empty($this->artist)) {
+			$stmt->bindParam(":artist", $this->artist);
+		}
+		if (!empty($this->album)) {
+			$stmt->bindParam(":album", $this->album);
+		}
+		$result = $this->db_getOne($stmt);
+			
+		if (!empty($result)) {
+			return;
+		}
+
+		*/
 		$this->lyrics = $lyrics;
 		$this->parsing();
 		$this->setLyrics();

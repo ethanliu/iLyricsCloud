@@ -26,8 +26,7 @@ class NewsModule extends Controller {
 	public function records($page = 1) {
 		$pages = $this->numberOfPages;
 		$page = ($page > $pages) ? $pages : (($page < 1) ? 1 : $page);
-		
-		$offset = ($page - 1) * $this->numberOfRowsPerPage;
+		$offset = ($page - 1 < 0) ? 0 : ($page - 1) * $this->numberOfRowsPerPage;
 
 		$sql = "SELECT * FROM news ORDER BY created DESC LIMIT {$this->numberOfRowsPerPage} OFFSET {$offset}";
 		$stmt = $this->db_prepare($sql);
