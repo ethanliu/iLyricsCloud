@@ -26,5 +26,13 @@ function lyricscom_lyrics_hook($param) {
 	$doc = phpQuery::newDocumentHTML($html)->find('div#lyric_space');
 	$html = strip_tags($doc->html(), '<br>');
 
+	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
+		return '';
+	}
+	
+	if (strpos($html, "Submit lyrics") !== false) {
+		return 'ddd';
+	}
+
 	return $html;
 }

@@ -27,5 +27,14 @@ function metrolyrics_lyrics_hook($param) {
 	pq('span')->after('<br>');
 	$html = strip_tags($doc->html(), '<br>');
 
+	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
+		return '';
+	}
+	
+	if (strpos($html, "Submit lyrics") !== false) {
+		return 'ddd';
+	}
+	
+
 	return $html;
 }

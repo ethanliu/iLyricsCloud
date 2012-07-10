@@ -27,7 +27,7 @@ function lyricswiki_lyrics_hook($param) {
 	$html = phpQuery::newDocumentHTML($html)->find('lyrics')->html();
 
 	//$html = str_replace('{{gracenote_takedown}}', '', $html);
-	if (strpos('{{gracenote_takedown}}', $html) !== false) {
+	if (strpos($html, '{{gracenote_takedown}}') !== false) {
 		return '';
 	}
 
