@@ -19,7 +19,22 @@ function lyricswiki_lyrics_hook($param) {
 	if ($xml->lyrics == 'Not found') {
 		return '';
 	}
-		
+
+	$html = file_get_contents($xml->url . '?action=edit');
+	$html = phpQuery::newDocumentHTML($html)->find('textarea')->html();
+	$html = str_replace('&lt;', '<', $html);
+	$html = str_replace('&gt;', '>', $html);
+	$html = phpQuery::newDocumentHTML($html)->find('lyrics')->html();
+
+	//$html = str_replace('{{gracenote_takedown}}', '', $html);
+	if (strpos('{{gracenote_takedown}}', $html) !== false) {
+		return '';
+	}
+
+	//$html = str_replace('{{gracenote_takedown}}', '', $html);
+	return $html;
+
+	/*
 	// since lyrics from api is lite version, we need to fetch from url again
 	$html = file_get_contents($xml->url);
 	$doc = phpQuery::newDocument($html)->find('.lyricbox');
@@ -37,5 +52,6 @@ function lyricswiki_lyrics_hook($param) {
 
 	$html = str_replace("&amp;", "&", $html);
 	$html = str_replace("&quot;", '"', $html);
-	return $html;
+	*/
+	//return $html;
 }

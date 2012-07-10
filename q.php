@@ -30,7 +30,14 @@ switch ($key) {
 		break;
 }
 
-$fetcher = new LyricsFetcher();
+$plugins = array();
+$plugins['en'] = array('metrolyrics:lyrics', 'lyricscom:lyrics', 'lyricswiki:lyrics');
+$plugins['zh'] = array('mojim:lyrics');
+$plugins['jp'] = array('yahoojp:lyrics', 'jpopasia:lyrics', 'utamap:lyrics');
+$plugins['artwork'] = array('google:artwork', 'kkbox:artwork');
+
+$fetcher = new LyricsFetcher($plugins);
+$fetcher->cache = false;
 $fetcher->lyricsId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 $fetcher->title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $fetcher->artist = isset($_REQUEST['artist']) ? $_REQUEST['artist'] : '';

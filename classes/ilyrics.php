@@ -16,25 +16,30 @@ class LyricsFetcher extends Controller {
 	public $lyricsId = 0;
 	public $lyrics = '';
 	public $lyricsSource = '';
+	public $cache = TRUE;
+	/*
 	private $plugins = array(
 		'en' => 'lyricswiki:lyrics',
 		'zh' => 'mojim:lyrics',
 		'jp' => 'yahoojp:lyrics|jpopasia:lyrics',//'jpopasia:lyrics|utamap:lyrics',
 		'artwork' => 'google:artwork|kkbox:artwork',
 	);
+	*/
 
+	private $plugins = array();
 	private $_stripped = FALSE;
 	private $_pages = 1;
 	private $_limited = 10;
 	private $_data = null;
 
-	public function __construct() {
+	public function __construct($plugins) {
 		parent::__construct();
 		//$this->database = (defined('DATABASE_DNS') ? DATABASE_DNS : '');
 		if (!empty($this->database) && !INSTALLED) {
 			$this->output("Run install first.");
 		}
 		
+		$this->plugins = $plugins;
 		$this->db_connect();
 	}
 	
@@ -80,8 +85,8 @@ class LyricsFetcher extends Controller {
 		
 		$url = $this->getArtwork();
 		if (empty($url)) {
-			$plugins = explode('|', $this->plugins['artwork']);
-			foreach ($plugins as $plugin) {
+			//$plugins = explode('|', $this->plugins['artwork']);
+			foreach ($this->plugins['artwork'] as $plugin) {
 				$url = $this->executePlugin($plugin);
 				if (!empty($url)) {
 					$this->setArtwork($url);
@@ -106,8 +111,10 @@ class LyricsFetcher extends Controller {
 			$this->lyrics = $this->getLyrics();
 			
 			if (empty($this->lyrics) && empty($this->lyricsId)) {
-				$plugins = explode('|', $this->plugins[$source]);
-				foreach ($plugins as $plugin) {
+				//count($this->plugins[$source])
+				//$plugins = explode('|', $this->plugins[$source]);
+				//$this->plugins[$source][array_rand($this->plugins[$source], 1)];
+				foreach ($this->plugins[$source] as $plugin) {
 					$this->lyrics = $this->executePlugin($plugin);
 					if (!empty($this->lyrics)) {
 						$this->parsing();
@@ -287,7 +294,9 @@ class LyricsFetcher extends Controller {
 			$result = $this->db_getRow($stmt);
 		}
 		else {
-			
+			if (!$this->cache) {
+				return '';
+			}
 			$query = '';
 			$query .= ' AND UPPER(lang) LIKE UPPER(:lang)';
 			$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
