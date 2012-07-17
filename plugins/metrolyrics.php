@@ -16,6 +16,10 @@ function metrolyrics_lyrics_hook($param) {
 	$replacements = array('-', '', '-');
 	$title = preg_replace($patterns, $replacements, strtolower($param['title']));
 
+	if (strlen($title . $artist) <= 2) {
+		return '';
+	}
+
 	$url = sprintf("http://www.metrolyrics.com/%s-lyrics-%s.html", $title, $artist);
 	//echo $url . '<hr>';exit;
 	$html = file_get_contents($url);
@@ -29,10 +33,6 @@ function metrolyrics_lyrics_hook($param) {
 
 	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
 		return '';
-	}
-	
-	if (strpos($html, "Submit lyrics") !== false) {
-		return 'ddd';
 	}
 	
 

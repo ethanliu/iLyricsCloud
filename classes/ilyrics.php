@@ -34,7 +34,7 @@ class LyricsFetcher extends Controller {
 
 	public function __construct($plugins) {
 		parent::__construct();
-		//$this->database = (defined('DATABASE_DNS') ? DATABASE_DNS : '');
+		//$this->database = (defined('DATABASE_DSN') ? DATABASE_DSN : '');
 		if (!empty($this->database) && !INSTALLED) {
 			$this->output("Run install first.");
 		}
@@ -87,6 +87,7 @@ class LyricsFetcher extends Controller {
 		if (empty($url)) {
 			//$plugins = explode('|', $this->plugins['artwork']);
 			foreach ($this->plugins['artwork'] as $plugin) {
+				print_r($plugin);
 				$url = $this->executePlugin($plugin);
 				if (!empty($url)) {
 					$this->setArtwork($url);
@@ -255,8 +256,9 @@ class LyricsFetcher extends Controller {
 		
 		$query = " AND UPPER(album) LIKE UPPER(:album)";
 		$query .= !empty($this->artist) ? " AND UPPER(artist) LIKE UPPER(:artist)" : '';
+		$random = ($this->provider == 'mysql') ? 'RAND()' : 'RANDOM()';
 
-		$sql = "SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY RANDOM() LIMIT 1";
+		$sql = "SELECT url FROM artworks WHERE (1=1) " . $query . " ORDER BY {$random} LIMIT 1";
 		$stmt = $this->db_prepare($sql);
 
 		$stmt->bindParam(":album", $this->album);

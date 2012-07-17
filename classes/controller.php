@@ -13,9 +13,10 @@ require_once dirname(__FILE__) . "/../config.php";
 class Controller {
 	public $database = '';
 	public $db;
+	public $provider;
 
 	public function __construct() {
-		$this->database = (defined('DATABASE_DNS') ? DATABASE_DNS : '');
+		$this->database = (defined('DATABASE_DSN') ? DATABASE_DSN : '');
 		$this->db_connect();
 	}
 	
@@ -69,12 +70,26 @@ class Controller {
 
 			if (preg_match('/user=([^;]*);/', $this->database, $matches)) {
 				$username = $matches[1];
+				$this->database = str_replace($matches[0], '', $this->database);
 			}
 			if (preg_match('/password=([^;]*);/', $this->database, $matches)) {
 				$password = $matches[1];
+				$this->database = str_replace($matches[0], '', $this->database);
+			}
+
+			if (preg_match('/(.*):/', $this->database, $matches)) {
+				$this->provider = $matches[1];
 			}
 			
 			$this->db = new PDO($this->database, $username, $password);
+			if (!$this->db) {
+				echo "Database access denied<br>";
+				echo $this->database . "<br>";
+				echo $username . "<br>";
+				echo $password . "<br>";
+				exit;
+			}
+			$this->db->query("SET NAMES 'utf8'");
 		}
 	}
 
@@ -93,10 +108,11 @@ class Controller {
 	}
 	
 	public function db_getOne($statement) {
+		$this->debug();
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Error (2): " . $error[2]);
+				die("Error (2): aaa" . $error[2]);
 				return FALSE;
 			}
 			$result = $statement->fetch();
