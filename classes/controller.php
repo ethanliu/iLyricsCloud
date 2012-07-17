@@ -108,11 +108,10 @@ class Controller {
 	}
 	
 	public function db_getOne($statement) {
-		$this->debug();
 		if ($this->db) {
 			if (!$statement->execute()) {
 				$error = $this->db->errorInfo();
-				die("Error (2): aaa" . $error[2]);
+				die("Error (2): " . $error[2]);
 				return FALSE;
 			}
 			$result = $statement->fetch();

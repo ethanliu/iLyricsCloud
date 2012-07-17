@@ -1,4 +1,7 @@
 <?php
+// Requried for AFNetwork Framework over iOS devices
+header("Content-type: application/json");
+
 require dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
@@ -43,8 +46,6 @@ $fetcher->title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $fetcher->artist = isset($_REQUEST['artist']) ? $_REQUEST['artist'] : '';
 $fetcher->album = isset($_REQUEST['album']) ? $_REQUEST['album'] : '';
 
-// Requried for AFNetwork Framework over iOS devices
-header("Content-type: application/json");
 switch ($action) {
 	case 'search':
 		$result = $fetcher->search();

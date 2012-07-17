@@ -87,7 +87,6 @@ class LyricsFetcher extends Controller {
 		if (empty($url)) {
 			//$plugins = explode('|', $this->plugins['artwork']);
 			foreach ($this->plugins['artwork'] as $plugin) {
-				print_r($plugin);
 				$url = $this->executePlugin($plugin);
 				if (!empty($url)) {
 					$this->setArtwork($url);
