@@ -1,9 +1,8 @@
 <?php
 /**
- * 
+ * Lyrics module
  *
- * @author Ethan Liu
- * @copyright , 14 February, 2012
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 require_once dirname(__FILE__) . "/../common.php";
@@ -13,21 +12,17 @@ class LyricsModule extends Controller {
 	public $numberOfRowsPerPage = 25;
 	public $numberOfPages = -1;
 	public $numberOfRecords = -1;
-	
+
 	public function __construct() {
 		parent::__construct();
-		if (!empty($this->database) && !INSTALLED) {
-			die('Run <a href="?q=install">install</a> database first.');
-		}
-		
 		$this->db_connect();
 	}
-	
+
 	public function records($page = 1) {
 		$pages = $this->numberOfPages;
 		$page = ($page > $pages) ? $pages : (($page < 1) ? 1 : $page);
 		$offset = ($page - 1 < 0) ? 0 : ($page - 1) * $this->numberOfRowsPerPage;
-		
+
 		$query = '';
 		$search = !empty($_REQUEST['search']) ? trim($_REQUEST['search']) : '';
 		if ($search) {
@@ -56,7 +51,7 @@ class LyricsModule extends Controller {
 		$result = $this->db_getRow($stmt);
 		return $result;
 	}
-	
+
 	public function update() {
 		$id = intval($_POST['id']);
 		$delete = @intval($_POST['delete']);
@@ -65,7 +60,7 @@ class LyricsModule extends Controller {
 		$artist = trim($_POST['artist']);
 		$album = trim($_POST['album']);
 		$lyrics = trim($_POST['lyrics']);
-		
+
 		if ($delete) {
 			$result = $this->delete($id);
 		}
@@ -81,10 +76,10 @@ class LyricsModule extends Controller {
 			$stmt->bindParam(":id", $id);
 			$result = $this->db_execute($stmt);
 		}
-		
+
 		return $result;
 	}
-	
+
 	public function numberOfRecords() {
 		$query = '';
 		$search = !empty($_REQUEST['search']) ? trim($_REQUEST['search']) : '';
@@ -96,18 +91,18 @@ class LyricsModule extends Controller {
 			$query .= " OR UPPER(artist) LIKE UPPER(:search)";
 			$query .= " OR UPPER(album) LIKE UPPER(:search) )";
 		}
-		
+
 		$sql = "SELECT COUNT(*) AS total FROM lyrics WHERE (1=1) " . $query;
 		$stmt = $this->db_prepare($sql);
-		
+
 		if (!empty($query)) {
 			$stmt->bindParam(":search", $search);
 		}
-		
+
 		$this->numberOfRecords = $this->db_getOne($stmt);
 		return $this->numberOfRecords;
 	}
-	
+
 	public function numberOfPages() {
 		if ($this->numberOfRecords < 0) {
 			$foo = $this->numberOfRecords();
@@ -115,7 +110,7 @@ class LyricsModule extends Controller {
 		$this->numberOfPages = ceil($this->numberOfRecords / $this->numberOfRowsPerPage);
 		return $this->numberOfPages;
 	}
-	
+
 	private function delete($id) {
 		$sql = "DELETE FROM lyrics WHERE id = :id";
 		$stmt = $this->db_prepare($sql);

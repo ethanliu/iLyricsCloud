@@ -2,10 +2,6 @@
 /**
  * CURL class
  *
- * @author Ethan Liu
- * @version $Id$
- * @copyright , 25 December, 2011
- * @package class
  **/
 
  class CURL {

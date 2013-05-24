@@ -2,9 +2,7 @@
 /**
  * Fetcher for allcdcovers.com
  *
- * @author Ethan Liu
- * @version $Id$
- * @copyright , 26 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
 

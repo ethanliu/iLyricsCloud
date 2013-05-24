@@ -2,8 +2,7 @@
 /**
  * fetcher for kkbox
  *
- * @author Ethan Liu
- * @copyright , 25 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
 

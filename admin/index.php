@@ -1,9 +1,8 @@
 <?php
 /**
- * 
+ * Main entry
  *
- * @author Ethan Liu
- * @copyright , 14 February, 2012
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 include "common.php";
@@ -12,7 +11,9 @@ $module = trim($_REQUEST['q']);
 $search = trim($_REQUEST['search']);
 $action = trim($_REQUEST['action']);
 
-include "header.php";
+if ($action !== 'set') {
+	include "header.php";
+}
 
 switch ($module) {
 	case 'artworks':
@@ -25,6 +26,11 @@ switch ($module) {
 		$m = new LyricsModule();
 		break;
 
+	case 'plugins':
+		include "modules/plugins.php";
+		$m = new PluginsModule();
+		break;
+
 	case 'news':
 		include "modules/news.php";
 		$m = new NewsModule();
@@ -33,58 +39,51 @@ switch ($module) {
 	case 'login':
 		include "modules/login.php";
 		break;
-		
+
 	case 'install':
 		include "modules/install.php";
+		$m = new InstallModule();
+		$m->install();
 		break;
-	
+
 	default:
+		$module = "dashboard";
 		include "modules/dashboard.php";
-		break;
+		$m = new DashboardModule();
 }
 
-if ($module == 'dashboard' || empty($module)) {
-	include "modules/artworks.php";
-	include "modules/lyrics.php";
-
-	$m = new ArtworksModule();
-	$totalArtworks = $m->numberOfRecords();
-
-	$m = new LyricsModule();
-	$totalLyrics = $m->numberOfRecords();
-
-	include "views/dashboard-view.php";
-}
-else if ($module == 'login') {
-}
-else if ($module == 'install') {
-	$m = new InstallModule();
-	$m->install();
-}
-else {
-	switch ($action) {
-		case 'edit':
+switch ($action) {
+	case 'edit':
+		$result = $m->edit($_REQUEST['id']);
+		include "views/{$module}-edit.php";
+	break;
+	case 'set':
+		$result = $m->set();
+		die($result);
+	break;
+	case 'update':
+		$result = $m->update();
+		if (!$result) {
 			$result = $m->edit($_REQUEST['id']);
 			include "views/{$module}-edit.php";
-		break;
-		case 'update':
-			$result = $m->update();
-			if (!$result) {
-				$result = $m->edit($_REQUEST['id']);
-				include "views/{$module}-edit.php";
+		}
+	//break;
+	default:
+		if ($module !== 'dashboard') {
+			if (method_exists($m, 'numberOfRecords')) {
+				$total = $m->numberOfRecords();
 			}
-		//break;
-		default:
-			$total = $m->numberOfRecords();
-			$pages = $m->numberOfPages();
+			if (method_exists($m, 'numberOfPages')) {
+				$pages = $m->numberOfPages();
+			}
 
 			$page = @intval($_REQUEST['page']);
 			$page = $page <= 0 ? 1 : ($page > $pages ? $pages : $page);
 
 			$result = $m->records($page);
 			include "views/{$module}-view.php";
-			break;
-	}
+		}
+		break;
 }
 
 include "footer.php";

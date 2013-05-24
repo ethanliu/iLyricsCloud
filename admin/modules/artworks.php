@@ -1,9 +1,8 @@
 <?php
 /**
- * 
+ * Artwork module
  *
- * @author Ethan Liu
- * @copyright , 14 February, 2012
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 require_once dirname(__FILE__) . "/../common.php";
@@ -13,16 +12,12 @@ class ArtworksModule extends Controller {
 	public $numberOfRowsPerPage = 25;
 	public $numberOfPages = -1;
 	public $numberOfRecords = -1;
-	
+
 	public function __construct() {
 		parent::__construct();
-		if (!empty($this->database) && !INSTALLED) {
-			die('Run <a href="?q=install">install</a> database first.');
-		}
-		
 		$this->db_connect();
 	}
-	
+
 	public function records($page = 1) {
 		$pages = $this->numberOfPages;
 		$page = ($page > $pages) ? $pages : (($page < 1) ? 1 : $page);
@@ -40,14 +35,14 @@ class ArtworksModule extends Controller {
 		$result = $this->db_getRow($stmt);
 		return $result;
 	}
-	
+
 	public function update() {
 		$id = intval($_POST['id']);
 		$delete = @intval($_POST['delete']);
 		$artist = trim($_POST['artist']);
 		$album = trim($_POST['album']);
 		$url = trim($_POST['url']);
-		
+
 		if ($delete) {
 			$result = $this->delete($id);
 		}
@@ -61,17 +56,17 @@ class ArtworksModule extends Controller {
 			$stmt->bindParam(":id", $id);
 			$result = $this->db_execute($stmt);
 		}
-		
+
 		return $result;
 	}
-	
+
 	public function numberOfRecords() {
 		$sql = "SELECT COUNT(*) AS total FROM artworks";
 		$stmt = $this->db_prepare($sql);
 		$this->numberOfRecords = $this->db_getOne($stmt);
 		return $this->numberOfRecords;
 	}
-	
+
 	public function numberOfPages() {
 		if ($this->numberOfRecords < 0) {
 			$foo = $this->numberOfLyrics();
@@ -79,7 +74,7 @@ class ArtworksModule extends Controller {
 		$this->numberOfPages = ceil($this->numberOfRecords / $this->numberOfRowsPerPage);
 		return $this->numberOfPages;
 	}
-	
+
 	private function delete($id) {
 		$sql = "DELETE FROM artworks WHERE id = :id";
 		$stmt = $this->db_prepare($sql);

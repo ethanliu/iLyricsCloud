@@ -1,11 +1,8 @@
 <?php
 /**
- * Controller template
+ * Controller
  *
- * @author Ethan Liu
- * @version $Id$
- * @copyright , 27 December, 2011
- * @package class
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 require_once dirname(__FILE__) . "/../config.php";
@@ -19,47 +16,9 @@ class Controller {
 		$this->database = (defined('DATABASE_DSN') ? DATABASE_DSN : '');
 		$this->db_connect();
 	}
-	
+
 	public function debug() {
 		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}
-
-	// google analytics section
-	public function googleAnalyticsGetImageUrl() {
-	    $url = "";
-		if (!defined('GA_PIXEL') || !defined('GA_ACCOUNT')) {
-			return $url;
-		}
-		
-		$url .= GA_PIXEL . "?";
-		$url .= "utmac=" . GA_ACCOUNT;
-		$url .= "&utmn=" . rand(0, 0x7fffffff);
-
-		$referer = @$_SERVER["HTTP_REFERER"];
-		$query = $_SERVER["QUERY_STRING"];
-		$path = $_SERVER["REQUEST_URI"];
-
-		//$path = @$_SERVER["PHP_SELF"];
-		//$param = array();
-		//foreach ($_REQUEST as $key => $value) {
-		//	if (!($key == 'key' || $key == 'time')) {
-		//		$param[] = $key . '=' . $value;
-		//	}
-		//}
-		//$path = $path . '?' . implode('&', $param);
-		
-		if (empty($referer)) {
-			$referer = "-";
-		}
-		$url .= "&utmr=" . urlencode($referer);
-		
-		if (!empty($path)) {
-			$url .= "&utmp=" . urlencode($path);
-		}
-		
-		$url .= "&guid=ON";
-		
-		return str_replace("&", "&amp;", $url);		
 	}
 
 	// sqlite section
@@ -80,7 +39,7 @@ class Controller {
 			if (preg_match('/(.*):/', $this->database, $matches)) {
 				$this->provider = $matches[1];
 			}
-			
+
 			$this->db = new PDO($this->database, $username, $password);
 			if (!$this->db) {
 				echo "Database access denied<br>";
@@ -104,9 +63,9 @@ class Controller {
 			return $stmt;
 		}
 		return FALSE;
-		
+
 	}
-	
+
 	public function db_getOne($statement) {
 		if ($this->db) {
 			if (!$statement->execute()) {
@@ -145,7 +104,7 @@ class Controller {
 		}
 		return FALSE;
 	}
-	
+
 	public function db_execute($statement) {
 		if ($this->db) {
 			if (!$statement->execute()) {

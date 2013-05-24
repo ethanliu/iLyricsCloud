@@ -3,7 +3,6 @@
  * fetcher for lyrics.com
  *
  * @author Ethan Liu <ethan@creativecrap.com>
- * @copyright Creativecrap.com, 10 July, 2012
  * @package plugin
  **/
 
@@ -26,7 +25,7 @@ function lyricscom_lyrics_hook($param) {
 	if (empty($html)) {
 		return '';
 	}
-	
+
 	$doc = phpQuery::newDocumentHTML($html)->find('div#lyric_space');
 	$html = strip_tags($doc->html(), '<br>');
 

@@ -3,7 +3,6 @@
  * fetcher for metrolyrics.com
  *
  * @author Ethan Liu <ethan@creativecrap.com>
- * @copyright Creativecrap.com, 10 July, 2012
  * @package plugin
  **/
 
@@ -26,7 +25,7 @@ function metrolyrics_lyrics_hook($param) {
 	if (empty($html)) {
 		return '';
 	}
-	
+
 	$doc = phpQuery::newDocumentHTML($html)->find('div#lyrics-body');
 	pq('span')->after('<br>');
 	$html = strip_tags($doc->html(), '<br>');
@@ -34,7 +33,7 @@ function metrolyrics_lyrics_hook($param) {
 	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
 		return '';
 	}
-	
+
 
 	return $html;
 }

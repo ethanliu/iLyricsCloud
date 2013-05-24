@@ -2,8 +2,7 @@
 /**
  * fetcher for lyricswiki from wikia.com
  *
- * @author Ethan Liu
- * @copyright , 25 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
 

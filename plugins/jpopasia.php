@@ -2,9 +2,7 @@
 /**
  * Fetcher for jpopasia.com
  *
- * @author Ethan Liu
- * @version $Id$
- * @copyright , 26 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
 
@@ -14,7 +12,7 @@ function jpopasia_lyrics_hook($param) {
 	$replacement = '';
 	$artist = preg_replace("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/", $replacement, $artist);
 	$url = "http://www.jpopasia.com/group/{$artist}/discography/";
-	
+
 	$html = @file_get_contents($url);
 	if (empty($html)) {
 		return '';
@@ -54,11 +52,11 @@ function jpopasia_lyrics_hook($param) {
 	$result['romanzied'] = preg_replace("#<strong>.*</strong><br>#i", "", $result['romanzied']);
 	$result['hangul'] = preg_replace("#<strong>.*</strong><br>#i", "", $result['hangul']);
 	$result['translation'] = preg_replace("#<strong>.*</strong><br>#i", "", $result['translation']);
-	
+
 	$lyrics = $result['hangul'];
 	$lyrics .= !empty($result['romanzied']) ? "\n<br><br>\nRomanized<br><br>\n" . $result['romanzied'] : '';
 	$lyrics .= !empty($result['translation']) ? "\n<br><br>\nTranslation<br><br>\n" . $result['translation'] : '';
-	
+
 	return $lyrics;
 }
 

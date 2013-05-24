@@ -3,37 +3,28 @@
 <head>
 	<meta charset="utf-8">
 	<title>iLyrics Cloud Admin</title>
-	<meta name="title" content="" />
-	<meta name="Description" content="" />
-	<meta name="Keywords" content="" />
-	<meta name="robots" content="index,follow,archive" />
-	<meta name="Copyright" content="(c) 2011 Creativecrap.com" />
-	<meta name="Author" content="Ethan" />
-	<meta http-equiv="X-UA-Compatible" content="IE=8" />
-	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-	<meta http-equiv="imagetoolbar" content="no" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.min.css" type="text/css" media="all">
 	<link rel="stylesheet" href="css/master.css" />
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 </head>
 <body>
 
-<div class="topbar">
-	<div class="fill">
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
 		<div class="container">
-			<a class="brand" href="./">iLyrics Cloud</a>
-			<?php if (isset($_SESSION['login_id']) && $_SESSION['login_id']):?>
-			<ul id="main-nav" class="nav">
-				<li><a href="./?q=artworks">Artworks</a></li>
-				<li><a href="./?q=lyrics">Lyrics</a></li>
-				<li><a href="./?q=news">News</a></li>
-				<li><a href="../demo.html" target="_blank">Demo</a></li>
-			</ul>
-			<form class="pull-left">
-				<input type="hidden" name="q" value="<?php echo $module; ?>">
-				<input type="search" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search">
-			</form>
-			<p class="pull-right"><a href="./login.php?q=logout">Logout</a></p>
+			<a href="./" class="brand"><span style="color:#aaa !important;">iLyrics</span><span style="color:#eee !important;">Cloud</span></a>
+			<div class="nav-collapse collapse">
+				<?php if (isset($_SESSION['login_id']) && $_SESSION['login_id']):?>
+				<ul id="primary_navigation" class="nav">
+					<li><a href="./?q=artworks">Artworks</a></li>
+					<li><a href="./?q=lyrics">Lyrics</a></li>
+					<li><a href="./?q=plugins">Plugins</a></li>
+					<li><a href="../index.html" target="_blank">Search</a></li>
+				</ul>
+				<form class="navbar-search pull-right" action="">
+					<input type="text" class="search-query span2" placeholder="Search" name="search" value="">
+				</form>
 			<?php endif;?>
+			</div>
 		</div>
 	</div>
 </div>

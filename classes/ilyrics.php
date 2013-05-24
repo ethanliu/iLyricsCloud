@@ -2,9 +2,7 @@
 /**
  * iLyrics Fetcher Class
  *
- * @author Ethan Liu
- * @copyright , 25 December, 2011
- * @package class
+ * @author Ethan Liu <ethan@creativecrap.com>
 **/
 
 require_once dirname(__FILE__) . "/controller.php";
@@ -17,14 +15,6 @@ class LyricsFetcher extends Controller {
 	public $lyrics = '';
 	public $lyricsSource = '';
 	public $cache = TRUE;
-	/*
-	private $plugins = array(
-		'en' => 'lyricswiki:lyrics',
-		'zh' => 'mojim:lyrics',
-		'jp' => 'yahoojp:lyrics|jpopasia:lyrics',//'jpopasia:lyrics|utamap:lyrics',
-		'artwork' => 'google:artwork|kkbox:artwork',
-	);
-	*/
 
 	private $plugins = array();
 	private $_stripped = FALSE;
@@ -34,19 +24,14 @@ class LyricsFetcher extends Controller {
 
 	public function __construct($plugins) {
 		parent::__construct();
-		//$this->database = (defined('DATABASE_DSN') ? DATABASE_DSN : '');
-		if (!empty($this->database) && !INSTALLED) {
-			$this->output("Run install first.");
-		}
-		
+
 		$this->plugins = $plugins;
 		$this->db_connect();
 	}
-	
+
 	// class interface
-	
+
 	public function output($error = '') {
-		$gaImageUrl = $this->googleAnalyticsGetImageUrl();
 		$data = array();
 		//if (empty($this->_data)) {
 		if (!is_array($this->_data)) {
@@ -56,7 +41,6 @@ class LyricsFetcher extends Controller {
 					'artist' => $this->artist,
 					'album' => $this->album,
 					'lyrics' => $this->lyrics,
-					'ga' => $gaImageUrl
 				));
 			}
 		}
@@ -75,14 +59,14 @@ class LyricsFetcher extends Controller {
 		print json_encode($result);
 		exit;
 	}
-	
+
 	public function artwork() {
 		$this->stripStrings();
-		
+
 		if ($this->album == '' || $this->artist == '') {
 			return '';
 		}
-		
+
 		$url = $this->getArtwork();
 		if (empty($url)) {
 			//$plugins = explode('|', $this->plugins['artwork']);
@@ -98,18 +82,18 @@ class LyricsFetcher extends Controller {
 		}
 		return $url;
 	}
-	
+
 	public function lyrics($source) {
 		$this->lyricsSource = $source;
 		$this->stripStrings();
-		
+
 		if ((empty($this->title) || strlen($this->artist . $this->album) <= 0) && empty($this->lyricsId)) {
 			return;
 		}
 
 		if (!empty($this->plugins[$source])) {
 			$this->lyrics = $this->getLyrics();
-			
+
 			if (empty($this->lyrics) && empty($this->lyricsId)) {
 				//count($this->plugins[$source])
 				//$plugins = explode('|', $this->plugins[$source]);
@@ -118,7 +102,7 @@ class LyricsFetcher extends Controller {
 					$this->lyrics = $this->executePlugin($plugin);
 					if (!empty($this->lyrics)) {
 						$this->parsing();
-						$this->setLyrics();
+						$this->saveLyrics($this->lyrics);
 						break;
 					}
 				}
@@ -135,42 +119,27 @@ class LyricsFetcher extends Controller {
 			return $this->lyrics;
 		}
 	}
-	
-	public function news($category) {
-		if ($category != 'app') {
-			$category = "widget";
-		}
-		
-		$sql = "SELECT created AS id, category, news
-			FROM news
-			WHERE category = :category
-			ORDER BY created DESC LIMIT 1";
-		$stmt = $this->db_prepare($sql);
-		$stmt->bindValue(":category", $category, PDO::PARAM_STR);
-		$result = $this->db_getRow($stmt);
-		return $result;
-	}
-	
+
 	public function search() {
 		if (!$this->db) {
 			return array();
 		}
-		
+
 		$this->stripStrings();
 		$result = array();
-		
+
 		$query = '';
 		$query .= !empty($this->title) ? ' AND UPPER(l.title) LIKE UPPER(:title)' : '';
 		$query .= !empty($this->artist) ? ' AND UPPER(l.artist) LIKE UPPER(:artist)' : '';
 		$query .= !empty($this->album) ? ' AND UPPER(l.album) LIKE UPPER(:album)' : '';
-		
+
 		// atleast one condition
 		if (empty($query)) {
 			return $result;
 		}
 		$sql = "SELECT COUNT(*) AS total FROM lyrics AS l WHERE (1=1) " . $query;
 		$stmt = $this->db_prepare($sql);
-		
+
 		if (!empty($this->title)) {
 			$value = "%" . $this->title . "%";
 			$stmt->bindValue(":title", $value, PDO::PARAM_STR);
@@ -185,29 +154,29 @@ class LyricsFetcher extends Controller {
 		}
 
 		$total = $this->db_getOne($stmt);
-		
+
 		if (empty($total)) {
 			$this->_pages = 0;
 			$this->_data = $result;
 			return $result;
 		}
-		
+
 		$page = empty($_REQUEST['page']) ? 1 : intval($_REQUEST['page']);
 		$offset = abs($page - 1) * $this->_limited;
 		$pages = ceil($total / $this->_limited);
-		
-		
+
+
 		$sql = "SELECT l.id, l.lang, l.title, l.artist, l.album, l.lyrics,
 					(SELECT url FROM artworks AS a WHERE UPPER(a.artist) = UPPER(l.artist) AND UPPER(a.album) = UPPER(l.album) ORDER BY a.created DESC LIMIT 1) AS url
 				FROM lyrics AS l
 				WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
 		/*
 		if (!empty($this->album) && !empty($this->artist)) {
-			
+
 			$query2 = '';
 			$query2 .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
 			$query2 .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
-			
+
 			$sql = "SELECT id, lang, title, artist, album, lyrics,
 					(SELECT url FROM artworks WHERE (1=1) " . $query2 . " ORDER BY id DESC LIMIT 1) AS url
 					FROM lyrics AS l WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
@@ -216,7 +185,7 @@ class LyricsFetcher extends Controller {
 			$sql = "SELECT id, lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " LIMIT {$this->_limited} OFFSET {$offset}";
 		}
 		*/
-		
+
 		$stmt = $this->db_prepare($sql);
 		if (!empty($this->title)) {
 			$value = "%" . $this->title . "%";
@@ -231,28 +200,28 @@ class LyricsFetcher extends Controller {
 			$stmt->bindValue(":album", $value);
 		}
 		$result = $this->db_getAll($stmt);
-		
-		for ($i=0, $loop = count($result); $i < $loop; $i++) { 
+
+		for ($i=0, $loop = count($result); $i < $loop; $i++) {
 			$result[$i]['lyrics'] = str_replace("\n", " ", $result[$i]['lyrics']);
 			$result[$i]['lyrics'] = substr($result[$i]['lyrics'], 0, 80) . '...';
 		}
-		
+
 		//var_dump($sql);
 		//var_dump($result);
-		
+
 		$this->_pages = $pages;
 		$this->_data = $result;
-		
+
 		return $result;
 	}
-	
+
 	// common methods
 
 	private function getArtwork() {
 		if (!$this->db || empty($this->album)) {
 			return '';
 		}
-		
+
 		$query = " AND UPPER(album) LIKE UPPER(:album)";
 		$query .= !empty($this->artist) ? " AND UPPER(artist) LIKE UPPER(:artist)" : '';
 		$random = ($this->provider == 'mysql') ? 'RAND()' : 'RANDOM()';
@@ -286,7 +255,7 @@ class LyricsFetcher extends Controller {
 		if (!$this->db) {
 			return '';
 		}
-		
+
 		$result = array();
 		if ($this->lyricsId) {
 			$query = "SELECT lyrics FROM lyrics WHERE id = :id ORDER BY created DESC LIMIT 1";
@@ -303,12 +272,12 @@ class LyricsFetcher extends Controller {
 			$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
 			$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
 			$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
-		
+
 			$sql = "SELECT lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
 			//var_dump($sql);
 			$stmt = $this->db_prepare($sql);
 			$stmt->bindParam(":lang", $this->lyricsSource);
-			
+
 			if (!empty($this->title)) {
 				$stmt->bindParam(":title", $this->title);
 			}
@@ -319,7 +288,7 @@ class LyricsFetcher extends Controller {
 				$stmt->bindParam(":album", $this->album);
 			}
 			$result = $this->db_getRow($stmt);
-			
+
 			if (!empty($result['lyrics'])) {
 				if (empty($this->title)) {
 					$this->title = $result['title'];
@@ -332,17 +301,17 @@ class LyricsFetcher extends Controller {
 				}
 			}
 		}
-		
+
 		return $result['lyrics'];
 	}
-	
+
 	// for migration
 	public function saveLyrics($lyrics) {
 		if (empty($lyrics)) {
 			$this->lyrics = '';
 			return;
 		}
-		
+
 		$this->stripStrings();
 		//$txt = $this->getLyrics();
 		$this->title = stripslashes($this->title);
@@ -354,7 +323,12 @@ class LyricsFetcher extends Controller {
 		}
 
 		$query = ' lang LIKE "' . $this->lyricsSource . '"';
-		$query .= ' AND UPPER(CONCAT(title, artist)) LIKE :search';
+		if (strpos($this->database, 'sqlite') === false) {
+			$query .= ' AND UPPER(CONCAT(title, artist)) LIKE :search';
+		}
+		else {
+			$query .= ' AND UPPER(title || artist) LIKE :search';
+		}
 		$sql = "SELECT id FROM lyrics WHERE " . $query . " ORDER BY created DESC LIMIT 1";
 		$stmt = $this->db_prepare($sql);
 		$stmt->bindParam(":search", strtoupper($this->title . $this->artist));
@@ -370,11 +344,11 @@ class LyricsFetcher extends Controller {
 		$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
 		$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
 		$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
-		
+
 		$sql = "SELECT id FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
 		$stmt = $this->db_prepare($sql);
 		$stmt->bindParam(":lang", $this->lyricsSource);
-			
+
 		if (!empty($this->title)) {
 			$stmt->bindParam(":title", $this->title);
 		}
@@ -385,17 +359,17 @@ class LyricsFetcher extends Controller {
 			$stmt->bindParam(":album", $this->album);
 		}
 		$result = $this->db_getOne($stmt);
-			
+
 		if (!empty($result)) {
 			return;
 		}
 
 		*/
-		$this->lyrics = $lyrics;
-		$this->parsing();
+		// $this->lyrics = $lyrics;
+		// $this->parsing();
 		$this->setLyrics();
 	}
-	
+
 	private function setLyrics() {
 		if (!$this->db) {
 			return '';
@@ -429,25 +403,25 @@ class LyricsFetcher extends Controller {
 		}
 		return $result;
 	}
-	
+
 	private function stripStrings() {
 		if (!$this->_stripped) {
 			$this->title = $this->removeFeatureString($this->title);
 			$this->album = $this->removeFeatureString($this->album);
 			$this->artist = $this->removeFeatureString($this->artist);
-			
+
 			$this->title = str_replace('%', '\%', $this->title);
 			$this->artist = str_replace('%', '\%', $this->artist);
 			$this->album = str_replace('%', '\%', $this->album);
-			
+
 		}
 		$this->_stripped = TRUE;
 	}
-	
+
 	private function parsing() {
 		$lyrics = $this->lyrics;
 		$plaintext = array();
-	
+
 		// first check, remove <br>\n
 		$pattern = "#<br\s*/?>\n#i";
 		preg_match($pattern, $lyrics, $matches);
@@ -461,14 +435,14 @@ class LyricsFetcher extends Controller {
 		if (!empty($matches)) {
 			$lyrics = preg_replace("#<br\s*/?>#i", "\n", $lyrics);
 		}
-	
+
 		// uniform line-break
 		$lyrics = preg_replace('#(\\r\\n|\\r|\\n)#', "\n", $lyrics);
 		$rows = explode("\n", $lyrics);
 		$loop = count($rows);
-	
+
 		// parsing, remove spam text
-		for ($i=0; $i < $loop; $i++) { 
+		for ($i=0; $i < $loop; $i++) {
 			$row = trim($rows[$i]);
 			$pattern = '/(document\.write|mojim|\.com|google|script|轉載來自|歌詞網 |動態歌詞|友站連結|提供歌詞|修正歌詞|http:\/\/)/i';
 			preg_match($pattern, $row, $matches);
@@ -476,15 +450,15 @@ class LyricsFetcher extends Controller {
 				$plaintext[] = $row;
 			}
 		}
-	
+
 		$lyrics = implode("\n", $plaintext);
 		$this->lyrics = trim($lyrics);
 	}
-	
+
 	private function removeFeatureString($str) {
 		$patterns = array();
 		$replacements = array();
-		
+
 		$patterns[] = '/\.mp3|\.wav|\.m4a/i';
 		$replacements[] = '';
 
@@ -540,5 +514,5 @@ class LyricsFetcher extends Controller {
 		$str = trim($str);
 		return $str;
 	}
-	
+
 }

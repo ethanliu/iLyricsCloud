@@ -1,10 +1,8 @@
 <?php
 /**
- * Database Installer
+ * Install module
  *
- * @author Ethan Liu
- * @copyright , 19 February, 2012
- * @package default
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 require_once dirname(__FILE__) . "/../common.php";
@@ -14,33 +12,31 @@ class InstallModule extends Controller {
 	public function __construct() {
 		parent::__construct();
 	}
-	
+
 	public function install() {
 		if (empty($this->database)) {
-			echo "There is no DSN information.";
+			die("Unable to connect database");
 		}
-		else if (!INSTALLED) {
-			$dsn = explode(':', $this->database);
-			switch ($dsn[0]) {
-				case 'sqlite':
-					$this->install_sqlite();
-					echo "Install sqlite.<br>";
-					break;
-				case 'pgsql':
-					$this->install_postgres();
-					echo "Install Postgres.<br>";
-					break;
-				case 'mysql':
-					$this->install_mysql();
-					echo "Install Mysql.<br>";
-					break;
-			}
-			echo "Installed success, please update INSTALLED from config.php.";
+
+		$dsn = explode(':', $this->database);
+		switch ($dsn[0]) {
+			case 'sqlite':
+				$this->install_sqlite();
+				echo "Install sqlite.<br>";
+				break;
+			case 'pgsql':
+				$this->install_postgres();
+				echo "Install Postgres.<br>";
+				break;
+			case 'mysql':
+				$this->install_mysql();
+				echo "Install Mysql.<br>";
+				break;
 		}
-		else {
-			echo "append....";
-			$this->install_heroku();
-			echo "Database already installed.";
+		// echo "Done, please update INSTALLED from config.php.";
+		$path = dirname(__FILE__) . "/../../cache/INSTALLED";
+		if (file_put_contents($path, "INSTALLED") === false) {
+			echo "Make sure 'cache' directory is writable.";
 		}
 		//$this->db_connect();
 	}
@@ -74,16 +70,17 @@ class InstallModule extends Controller {
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
 
-			$sql = 'CREATE TABLE news (
+			$sql = 'CREATE TABLE plugins (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				created INTEGER NOT NULL DEFAULT 0,
-				"category" VARCHAR,
-				"news" TEXT);';
+				"path" VARCHAR,
+				"ordering"  INTEGER NOT NULL DEFAULT 0,
+				"enabled" INTEGER NOT NULL DEFAULT 0);';
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
 		}
 	}
-	
+
 	private function install_mysql() {
 		//$this->db = new PDO($this->database);
 		if (!$this->db) {
@@ -102,7 +99,7 @@ class InstallModule extends Controller {
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		$stmt = $this->db_prepare($sql);
 		$this->db_execute($stmt);
-		
+
 		$sql = "CREATE TABLE IF NOT EXISTS `artworks` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`created` int(11) NOT NULL,
@@ -113,18 +110,6 @@ class InstallModule extends Controller {
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		$stmt = $this->db_prepare($sql);
 		$this->db_execute($stmt);
-		
-
-		$sql = "CREATE TABLE IF NOT EXISTS `news` (
-				`id` int(11) NOT NULL AUTO_INCREMENT,
-				`created` int(11) NOT NULL,
-				`category` varchar(20) NOT NULL,
-				`news` text NOT NULL,
-				PRIMARY KEY (`id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-		$stmt = $this->db_prepare($sql);
-		$this->db_execute($stmt);
-
 	}
 
 	private function install_postgres() {
@@ -169,29 +154,7 @@ class InstallModule extends Controller {
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
 
-			$sql = "CREATE SEQUENCE news_id_seq;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "CREATE TABLE news (
-					id integer PRIMARY KEY DEFAULT nextval('news_id_seq'),
-					created integer,
-					category varchar(20),
-					news text);";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
-
-			$sql = "ALTER SEQUENCE news_id_seq OWNED BY news.id;";
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
 		}
 	}
-	
-	// temp use only, for adding missing database to heroku
-	private function install_heroku() {
-		$sql = "ALTER TABLE news ADD COLUMN category varchar(20);";
-		$stmt = $this->db_prepare($sql);
-		$this->db_execute($stmt);
-	}
-	
+
 }

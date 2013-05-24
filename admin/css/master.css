@@ -1,3 +1,59 @@
-@import url('reset.css');
-@import url('bootstrap.min.css');
-@import url('main.css');
+body {
+	font: 75% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	line-height: 1.5em;
+	padding-top: 40px;
+}
+
+footer {
+	padding-top:40px;
+	border:0;
+}
+
+.content {
+	padding:40px 0;
+}
+
+.pager .page {
+	float:right;
+	text-align:right;
+	padding-right:5px;
+}
+.pager .nav {
+	float:left;
+	padding-left:5px;
+}
+
+
+.hide {display:none;}
+.ellipsis {overflow:none; height:80px; width:300px; text-overflow: ellipsis;}
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+.sorted_table tr { cursor: pointer; }
+.sorted_table tr.placeholder {
+	display: block;
+	background: red;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+.sorted_table tr.placeholder:before {
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	border: 5px solid transparent;
+	border-left-color: red;
+	margin-top: -5px;
+	left: -5px;
+	border-right: none;
+}

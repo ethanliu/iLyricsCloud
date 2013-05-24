@@ -2,14 +2,13 @@
 /**
  * fetcher for utamap.com
  *
- * @author Ethan Liu
- * @copyright , 25 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
- 
+
 function utamap_lyrics_hook($param) {
 	$url = "http://www.utamap.com/searchkasi.php?searchname=title&sortname=1&pattern=1&act=search&word=" . $param['title'];
-	
+
 	$html = @file_get_contents($url);
 	if (empty($html)) {
 		return '';

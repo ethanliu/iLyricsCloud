@@ -3,7 +3,6 @@
  * fetcher for soso.com
  *
  * @author Ethan Liu <ethan@creativecrap.com>
- * @copyright Creativecrap.com, 11 July, 2012
  * @package plugin
  **/
 

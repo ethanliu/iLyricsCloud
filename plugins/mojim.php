@@ -2,15 +2,14 @@
 /**
  * fetcher for mojim.com
  *
- * @author Ethan Liu
- * @copyright , 25 December, 2011
+ * @author Ethan Liu <ethan@creativecrap.com>
  * @package plugin
  **/
- 
+
 require_once dirname(__FILE__) . '/../classes/curl.php';
 function mojim_lyrics_hook($param) {
 	$curl = new CURL();
-	
+
 	if ($param['album'] != '') {
 		// t2 for album
 		$url = sprintf("http://mojim.com/%s.html?t2", urlencode($param['album']));
@@ -50,14 +49,14 @@ function mojim_lyrics_hook($param) {
 
 	if (empty($url)) {
 		// try cn version
-		
+
 		if ($param['album'] != '') {
 			$url = sprintf("http://mojim.com/%s.html?g2", urlencode($param['album']));
 			$html = $curl->get($url);
 			if (empty($html)) {
 				return '';
 			}
-		
+
 			// get url of this song
 			$url = '';
 			$html = phpQuery::newDocumentHTML($html);
@@ -75,7 +74,7 @@ function mojim_lyrics_hook($param) {
 			if (empty($html)) {
 				return '';
 			}
-		
+
 			// get url of this song
 			$url = '';
 			$html = phpQuery::newDocumentHTML($html)->find('table.iB td');
@@ -92,13 +91,13 @@ function mojim_lyrics_hook($param) {
 			return '';
 		}
 	}
-	
+
 	$url = sprintf("http://mojim.com%s", $url);
 	$html = $curl->get($url);
 	if (empty($html)) {
 		return '';
 	}
-	
+
 	$doc = phpQuery::newDocumentHTML($html)->find('dl:last');
 	//$html = $doc->find('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd');
 	//$html = pq('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd')->html();

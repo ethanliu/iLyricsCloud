@@ -1,9 +1,8 @@
 <?php
 /**
- * 
+ * Login
  *
- * @author Ethan Liu
- * @copyright , 14 February, 2012
+ * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
 @session_start();
@@ -15,7 +14,7 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) {
 
 	$username = trim($_POST['username']);
 	$password = trim($_POST['password']);
-	
+
 	if ($username == ADMIN_USER && $password == ADMIN_PASS) {
 		$_SESSION['login_id'] = 1;
 		header("Location:index.php");

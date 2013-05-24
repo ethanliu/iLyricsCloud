@@ -1,4 +1,10 @@
 <?php
+/**
+ * Common functions
+ *
+ * @author Ethan Liu <ethan@creativecrap.com>
+ **/
+
 function t($txt) {
 	return $txt;
 }
@@ -11,7 +17,7 @@ function _time($timestamp, $format = 'timeago') {
 			$now = time();
 			$diff = $now - $timestamp;
 			$day_diff = floor($diff / 86400);
-			
+
 			// only care about dates in the past (by far the most common use case)
 			// and only dates within the past month (anything beyond a month becomes fuzzy and impractical).
 			if ($day_diff < 0 || $day_diff >= 31 ) {
@@ -24,7 +30,7 @@ function _time($timestamp, $format = 'timeago') {
 					break;
 				}
 			}
-			
+
 			if ($day_diff == 0) {
 				switch ($diff) {
 					case $diff < 60;
@@ -57,15 +63,15 @@ function _time($timestamp, $format = 'timeago') {
 				return sprintf(t("%d weeks ago"), ceil($day_diff / 7));
 			}
 		break;
-		
+
 		case 'full':
 			return date("Y-m-d H:i:s", $timestamp);
 		break;
-		
+
 		case 'long': // rfc
 			return date('r', $timestamp);
 		break;
-		
+
 		case 'iso': // iso 8601
 		default:
 			return date('c', $timestamp);
