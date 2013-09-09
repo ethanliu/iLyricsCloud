@@ -21,7 +21,7 @@
 	<td><?php echo $result[$i]['artist']; ?></td>
 	<td><?php echo $result[$i]['album']; ?></td>
 	<td><?php echo $result[$i]['url']; ?></td>
-	<td><div class="artwork span2"><img src="<?php echo $result[$i]['url']; ?>"></div></td>
+	<td><div class="artwork span1"><img src="<?php echo $result[$i]['url']; ?>"></div></td>
 </tr>
 <?php endfor; ?>
 </table>

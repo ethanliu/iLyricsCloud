@@ -71,7 +71,7 @@ class LyricsFetcher extends Controller {
 		if (empty($url)) {
 			//$plugins = explode('|', $this->plugins['artwork']);
 			foreach ($this->plugins['artwork'] as $plugin) {
-				$url = $this->executePlugin($plugin);
+				$url = $this->executePlugin('artwork', $plugin);
 				if (!empty($url)) {
 					$this->setArtwork($url);
 					break;
@@ -99,7 +99,7 @@ class LyricsFetcher extends Controller {
 				//$plugins = explode('|', $this->plugins[$source]);
 				//$this->plugins[$source][array_rand($this->plugins[$source], 1)];
 				foreach ($this->plugins[$source] as $plugin) {
-					$this->lyrics = $this->executePlugin($plugin);
+					$this->lyrics = $this->executePlugin('lyrics', $plugin);
 					if (!empty($this->lyrics)) {
 						$this->parsing();
 						$this->saveLyrics($this->lyrics);
@@ -385,20 +385,18 @@ class LyricsFetcher extends Controller {
 		$this->db_execute($stmt);
 	}
 
-	private function executePlugin($namespace) {
-		$namespace = explode(':', $namespace);
-		$plugin = $namespace[0];
-		$hook = "_{$namespace[1]}_hook";
+	private function executePlugin($type = 'lyrics', $plugin) {
+		$hook = "{$plugin}_{$type}_hook";
 		$path = dirname(__FILE__) . "/../plugins/{$plugin}.php";
 		$result = '';
 		if (file_exists($path)) {
 			require_once $path;
-			if (function_exists($plugin . $hook)) {
+			if (function_exists($hook)) {
 				$param = array(
 					'title' => $this->title,
 					'artist' => $this->artist,
 					'album' => $this->album);
-				$result = call_user_func($plugin . $hook, $param);
+				$result = call_user_func($hook, $param);
 			}
 		}
 		return $result;

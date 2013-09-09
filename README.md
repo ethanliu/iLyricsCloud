@@ -8,11 +8,9 @@ Source code: https://bitbucket.org/ethanliu/ilyrics-cloud
 
 ### Dependencies
 
-jQuery
-
-Bootstrap
-
-phpQuery
+jQuery  
+Bootstrap  
+phpQuery  
 
 ### Requires
 
@@ -22,48 +20,36 @@ Database: Mysql, Postgres, SQLite
 
 ### Installation
 
-1. Download and unzip source
-2. Create a database on your web server, skip if use SQLite.
-3. Rename or copy config.sample.php to config.php
-4.
+1. Download and unzip source.
+- Create a database on your web server, skip if use SQLite.
+- Make sure cache folder is writable.
+- Rename or copy config.sample.php to config.php.
+- Change DATABASE_DSN to matches your choice.
+- Change ADMIN_USER and ADMIN_PASS to something more secure.
+- Open ilyrics-cloud/admin/ in browser, click install database.
+- Click Search from navigation, have a search test see if anything works.
+
+### Plugins
+
+Plugin is the fetcher for lyrics or artworks, it does access data from provider by their api if provided, or grab web page from data source then parse lyrics or artwork from it.
+
+#### current available plugins:
+
+google - Google images for artwork  
+jpopasia - Japanese and Korean lyrics  
+kkbox - Artworks
+lyricscom - English lyrics  
+lyricswiki - English lyrics  
+metrolyrics - English lyrics  
+mojim -  Chinese lyrics  
+utamap - Japanese lyrics  
+yahoojp - Japanese lyrics
 
 
+### Plugin guideline
 
+Only two function would be called from iLyrics Class, with special function name.
 
-your secret key password.
-Upload the WordPress files in the desired location on your web server:
-
-    If you want to integrate WordPress into the root of your domain (e.g. http://example.com/), move or upload all contents of the unzipped WordPress directory (but excluding the directory itself) into the root directory of your web server.
-    If you want to have your WordPress installation in its own subdirectory on your web site (e.g. http://example.com/blog/), create the blog directory on your server and upload WordPress to the directory via FTP.
-    Note: If your FTP client has an option to convert file names to lower case, make sure it's disabled.
-
-Run the WordPress installation script by accessing wp-admin/install.php in a web browser.
-
-    If you installed WordPress in the root directory, you should visit: http://example.com/wp-admin/install.php
-    If you installed WordPress in its own subdirectory called blog, for example, you should visit: http://example.com/blog/wp-admin/install.php
-
-
-Due to the PDO limited, the folder which the cache.db file stored must have write permission.
-
-## Plugins
-
-google
-jpopasia
-kkbox
-lyricswiki
-mojim
-utamap
-
-
-## Plugin guildline
-
-Only two function would be call from iLyrics Class, with special function name.
-
-{pluginName}_lyrics_hook
-{pluginName}_artwork_hook
-
-
-## Demo
-check demo.html for live demo
-
+{pluginName}\_lyrics_hook()  
+{pluginName}\_artwork_hook()  
 

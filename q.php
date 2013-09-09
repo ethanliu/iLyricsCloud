@@ -6,7 +6,6 @@ define('GA_ACCOUNT', 'MO-402625-5');
 define('GA_DOMAIN', 'creativecrap.com');
 
 require_once dirname(__FILE__) . "/classes/ilyrics.php";
-require_once dirname(__FILE__) . "/classes/ga.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
 $lang = strtolower(@trim($_REQUEST['lang']));
@@ -26,23 +25,16 @@ $fetcher->title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $fetcher->artist = isset($_REQUEST['artist']) ? $_REQUEST['artist'] : '';
 $fetcher->album = isset($_REQUEST['album']) ? $_REQUEST['album'] : '';
 
-$ga = new GoogleAnalyticsTracker(GA_ACCOUNT, GA_DOMAIN);
-$ga->addPageView('/ilyrics-widget');
-
-
 switch ($action) {
 	case 'search':
-		$ga->addEvent('iLyrics Widget', 'Search', $fetcher->title . ' - ' . $fetcher->artist);
 		$result = $fetcher->search();
 		$fetcher->output();
 		break;
 	case 'lyrics':
-		$ga->addEvent('iLyrics Widget', 'Lyrics', $fetcher->title . ' - ' . $fetcher->artist, $lang);
 		$result = $fetcher->lyrics($lang);
 		$fetcher->output();
 		break;
 	case 'artwork':
-		$ga->addEvent('iLyrics Widget', 'Artwork', $fetcher->album);
 		$url = $fetcher->artwork();
 		$result = array(
 			'error' => '',
