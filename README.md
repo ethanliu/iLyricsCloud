@@ -1,28 +1,14 @@
 ## iLyricsCloud - lyrics and artworks fetcher
 
-lyraox, leMusic
-
 iLyricsCloud is a web service to find lyrics and artworks for a given song from various sites.
 
 Source code: https://bitbucket.org/ethanliu/ilyrics-cloud
 
-### Dependencies
-
-jQuery  
-Bootstrap  
-phpQuery  
-
-### Requires
-
-Web server: Apache, lighttpd, nginx
-
-Database: Mysql, Postgres, SQLite
-
 ### Installation
 
 1. Download and unzip source.
-- Create a database on your web server, skip if use SQLite.
-- Make sure cache folder is writable.
+- Create a database on your server, skip if choose SQLite.
+- Create a "cache" directory if not exists, and make sure the cache folder is writable.
 - Rename or copy config.sample.php to config.php.
 - Change DATABASE_DSN to matches your choice.
 - Change ADMIN_USER and ADMIN_PASS to something more secure.
@@ -37,19 +23,24 @@ Plugin is the fetcher for lyrics or artworks, it does access data from provider 
 
 google - Google images for artwork  
 jpopasia - Japanese and Korean lyrics  
-kkbox - Artworks
+kkbox - Artworks  
 lyricscom - English lyrics  
 lyricswiki - English lyrics  
 metrolyrics - English lyrics  
 mojim -  Chinese lyrics  
 utamap - Japanese lyrics  
-yahoojp - Japanese lyrics
+yahoojp - Japanese lyrics  
 
 
-### Plugin guideline
+### Plugin Guideline
 
 Only two function would be called from iLyrics Class, with special function name.
 
 {pluginName}\_lyrics_hook()  
+return lyrics as string.
+
 {pluginName}\_artwork_hook()  
+return image url as string.
+
+To active a plugin, after put the file in plugins folder, you must add the plugin to into $plugins from config.php file.
 
