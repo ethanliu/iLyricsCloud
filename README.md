@@ -1,8 +1,10 @@
 # iLyricsCloud - lyrics and artworks fetcher
 
-iLyricsCloud is a web service to find lyrics and artworks for a given song from various sites.
+iLyricsCloud is a web service to find lyrics and artworks for a given song from various sites. Also come with a backend to help you manipulate the database.
 
-Source code: https://bitbucket.org/ethanliu/ilyrics-cloud
+iLyricsWidget - a popular dashboard widget for Mac OS X works with iLyricsCloud.   
+https://creativecrap.com/ilyrics-widget-itunes
+
 
 ## Requirements
 
