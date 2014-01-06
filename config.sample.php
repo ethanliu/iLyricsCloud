@@ -23,8 +23,6 @@ set_time_limit(180);
 define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', 'admin');
 
-define('INSTALLED', true);
-
 define('DATABASE_DSN', 'sqlite:' . dirname(__FILE__) . '/cache/cache.db');
 // define('DATABASE_DSN', 'mysql:host=127.0.0.1;port=3306;dbname=;user=;password=;');
 

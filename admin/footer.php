@@ -3,7 +3,7 @@
 
 <div class="pagination-centered">
 	<footer>
-		iLyricsCloud | <a href="https://bitbucket.org/ethanliu/ilyrics-cloud">bitbucket</a>
+		iLyricsCloud | <a href="https://github.com/ethanliu/iLyricsCloud">github</a>
 	</footer>
 </div>
 

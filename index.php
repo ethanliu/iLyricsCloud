@@ -47,7 +47,7 @@
 	</div>
 </div>
 
-<p class="pagination-centered" style="padding-top:40px;">iLyricsCloud | <a href="https://bitbucket.org/ethanliu/ilyrics-cloud">bitbucket</a></p>
+<p class="pagination-centered" style="padding-top:40px;">iLyricsCloud | <a href="https://github.com/ethanliu/iLyricsCloud">github</a></p>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/bootstrap.min.js"></script>

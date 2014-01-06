@@ -37,8 +37,11 @@ class InstallModule extends Controller {
 		$path = dirname(__FILE__) . "/../../cache/INSTALLED";
 		if (file_put_contents($path, "INSTALLED") === false) {
 			echo "Make sure 'cache' directory is writable.";
+			exit;
 		}
 		//$this->db_connect();
+		echo "Install success.";
+		exit;
 	}
 
 	private function install_sqlite() {
@@ -70,14 +73,6 @@ class InstallModule extends Controller {
 			$stmt = $this->db_prepare($sql);
 			$this->db_execute($stmt);
 
-			$sql = 'CREATE TABLE plugins (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				created INTEGER NOT NULL DEFAULT 0,
-				"path" VARCHAR,
-				"ordering"  INTEGER NOT NULL DEFAULT 0,
-				"enabled" INTEGER NOT NULL DEFAULT 0);';
-			$stmt = $this->db_prepare($sql);
-			$this->db_execute($stmt);
 		}
 	}
 
