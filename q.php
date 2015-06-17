@@ -1,10 +1,6 @@
 <?php
 // Requried for AFNetwork Framework over iOS devices
 header("Content-type: application/json");
-
-define('GA_ACCOUNT', 'MO-402625-5');
-define('GA_DOMAIN', 'creativecrap.com');
-
 require_once dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
