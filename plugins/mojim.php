@@ -98,12 +98,12 @@ function mojim_lyrics_hook($param) {
 		return '';
 	}
 
-	$doc = phpQuery::newDocumentHTML($html)->find('dl:last');
+	$doc = phpQuery::newDocumentHTML($html)->find('#fsZ dl');
 	//$html = $doc->find('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd');
 	//$html = pq('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd')->html();
 	//$html = $doc->find("a:contains(" . htmlspecialchars($param['title']) . ")")->parent()->next('dd');
-	$html = pq("a:contains(" . htmlspecialchars($param['title']) . ")")->parent()->next('dd')->html();
-	$doc = phpQuery::newDocumentHTML($html);
+	// $html = pq("a:contains(" . htmlspecialchars($param['title']) . ")")->parent()->next('dd')->html();
+	// $doc = phpQuery::newDocumentHTML($html);
 	//pq('a')->remove();
 	pq('script')->remove();
 	//pq('hr')->remove();
