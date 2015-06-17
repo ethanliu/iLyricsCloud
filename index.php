@@ -11,9 +11,6 @@
 	</style>
 </head>
 <body>
-
-<body>
-
 <div class="row-fluid">
 	<div class="span3 sidebar">
 		<legend>Search</legend>
