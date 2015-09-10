@@ -7,29 +7,22 @@
  **/
 
 function google_artwork_hook($param) {
-	$image_size = "large"; //can be 'icon' 'small' 'medium' 'large'
-	$limit_mode = "e"; // i for include as_sitesearch, e for exclude
-	$limit_to_domain = "imageshack.us"; //"amazon.com"; // 'amazon.com' or 'artistdirect.com'
-
 	$query = urlencode($param['album']) . '%20' . urlencode($param['artist']);
-	$url = "http://images.google.com/images?ie=utf-8&hl=en&btnG=Google+Search";
-	$url .= "&imgsz={$image_size}&as_dt={$limit_mode}&as_sitesearch={$limit_to_domain}&q=" . $query;
+	$url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0';
+	$url .= "&as_rights=cc_publicdomain&imgsz=large&rsz=1";
+	$url .= '&q=artwork%20' . $query;
+	
+	// sendRequest
+	// note how referer is set manually
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	// curl_setopt($ch, CURLOPT_REFERER, /* Enter the URL of your site here */);
+	$body = curl_exec($ch);
+	curl_close($ch);
 
-	$html = file_get_contents($url);
-	if (empty($html)) {
-		return '';
-	}
-
-	$url = phpQuery::newDocument($html)->find('table.images_table a:first')->attr('href');
-	$url = 'http://images.google.com' . $url; // openshift version parse_url need valid full url
-	parse_str(parse_url($url, PHP_URL_QUERY), $args);
-	if (empty($args['imgurl'])) {
-		return '';
-	}
-
-	if (strpos($args['imgurl'], $limit_to_domain) !== false) {
-		return '';
-	}
-
-	return $args['imgurl'];
+	// now, process the JSON string
+	$json = json_decode($body);
+	$link = empty($json->responseData->results[0]->url) ? '' : $json->responseData->results[0]->url;
+	return $link;
 }
