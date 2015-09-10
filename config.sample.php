@@ -36,7 +36,7 @@ $plugins['zh'] = array(
 	'mojim',
 );
 $plugins['jp'] = array(
-	'yahoojp',
+	// 'yahoojp',
 	'jpopasia',
 	'utamap',
 );

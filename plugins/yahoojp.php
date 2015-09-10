@@ -15,13 +15,13 @@ function yahoojp_lyrics_hook($param) {
 
 	$html = @file_get_contents($url);
 	if (empty($html)) {
-		return 'empty html';
+		return '';
 	}
 
 	$doc = phpQuery::newDocument($html);
 
 	if (empty($doc)) {
-		return 'empty doc';
+		return '';
 	}
 
 	foreach (pq('.kashi02 td.lft dt a') as $key => $item) {
