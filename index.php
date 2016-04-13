@@ -23,7 +23,6 @@
 			<select name="action" class="form-control">
 				<option value="lyrics">Lyrics</option>
 				<option value="artwork">Artworks</option>
-				<option value="search">Database</option>
 			</select><br>
 			<label>Lang:</label>
 			<select name="lang" class="form-control">
@@ -61,6 +60,8 @@
 $(function() {
 	$("#submit").click(function() {
 		$("#console").text('Searching...');
+		$("#lrc").val('');
+		
 		var title = $("input[name='title']").val();
 		var artist = $("input[name='artist']").val();
 		var album = $("input[name='album']").val();
