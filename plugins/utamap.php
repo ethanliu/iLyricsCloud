@@ -16,23 +16,30 @@ function utamap_lyrics_hook($param) {
 
 	$html = @mb_convert_encoding($html, "UTF-8", "SJIS");
 	$html = str_replace("charset=Shift_JIS", "charset=utf8", $html);
-	$doc = phpQuery::newDocument($html)->find('table table');
+	$doc = phpQuery::newDocument($html)->find('table');
 
 	if (empty($doc)) {
 		return '';
 	}
-	foreach (pq('td') as $key => $item) {
-		if (pq($item)->text() == $param['artist']) {
+
+	$url = '';
+	foreach (pq('td') as $item) {
+		$text = trim(pq($item)->text());
+		if (strtolower($text) == strtolower($param['artist'])) {
+			$url = trim(pq($item)->prev('td')->find('a')->attr('href'));
 			break;
 		}
-		$td = $item;
-	}
-	$doc = explode('=', pq($td)->find('a')->attr('href'));
-	if (empty($doc)||empty($doc[1])) {
-		return '';
 	}
 
-	$url = "http://www.utamap.com/phpflash/flashfalsephp.php?unum=" . $doc[1];
+	if (empty($url)) {
+		return '';
+	}
+	
+	// $url = "./showkasi.php?surl=B30135";
+	
+	$query = explode('=', parse_url($url, PHP_URL_QUERY));
+	$url = "http://www.utamap.com/phpflash/flashfalsephp.php?unum=" . $query[1];
+
 	$html = @file_get_contents($url);
 	if (empty($html)) {
 		return '';

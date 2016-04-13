@@ -20,7 +20,7 @@ function lyricscom_lyrics_hook($param) {
 	}
 
 	$url = sprintf("http://www.lyrics.com/%s-lyrics-%s.html", $title, $artist);
-	//echo $url . '<hr>';exit;
+	// fb($url);
 	$html = file_get_contents($url);
 	if (empty($html)) {
 		return '';

@@ -18,8 +18,9 @@ function jpopasia_lyrics_hook($param) {
 		return '';
 	}
 
+	$url = '';
 	$html = phpQuery::newDocumentHTML($html);
-	foreach (pq(".tracklist > ul a:contains(" . htmlspecialchars($param['title']) . ")") as $item) {
+	foreach (pq(".tracklist a:contains(" . htmlspecialchars($param['title']) . ")") as $item) {
 		$url = trim(pq($item)->attr('href'));
 		if (!empty($url)) {
 			break;

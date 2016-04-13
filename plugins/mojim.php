@@ -7,7 +7,9 @@
  **/
 
 require_once dirname(__FILE__) . '/../classes/curl.php';
+
 function mojim_lyrics_hook($param) {
+	$url = '';
 	$curl = new CURL();
 
 	if ($param['album'] != '') {
@@ -17,16 +19,18 @@ function mojim_lyrics_hook($param) {
 		if (empty($html)) {
 			return '';
 		}
-		// get url of this album
-		$url = '';
-		$html = phpQuery::newDocumentHTML($html);
-		foreach (pq("a:contains(" . htmlspecialchars($param['album']) . ")") as $item) {
-			// only get first result, when it usually be right
-			$url = pq($item)->attr('href');
-			if (!empty($url)) {
+
+		// .mxsh_sse a:contains($param['artist'])
+
+		$doc = phpQuery::newDocumentHTML($html);
+		foreach (pq('.mxsh_ss3 a') as $item) {
+			$attrTitle = trim(pq($item)->attr('title'));
+			if (strpos($attrTitle, $param['artist']) !== false) {
+				$url = pq($item)->attr('href');
 				break;
 			}
 		}
+
 	}
 	else {
 		// t3 for song
@@ -37,11 +41,16 @@ function mojim_lyrics_hook($param) {
 		}
 		// get url of this song
 		$url = '';
-		$html = phpQuery::newDocumentHTML($html)->find('table.iB td');
-		foreach (pq("a:contains(" . htmlspecialchars($param['title']) . ")") as $item) {
-			// only get first result, when it usually be right
-			$url = pq($item)->attr('href');
-			if (!empty($url)) {
+		$doc = phpQuery::newDocumentHTML($html)->find("dl");
+		if (!$doc) {
+			return '';
+		}
+		
+		// [title*=artist]
+		foreach (pq("a") as $item) {
+			$title = pq($item)->attr('title');
+			if (strpos($title, $param['artist']) !== false) {
+				$url = pq($item)->attr('href');
 				break;
 			}
 		}
@@ -57,13 +66,11 @@ function mojim_lyrics_hook($param) {
 				return '';
 			}
 
-			// get url of this song
-			$url = '';
-			$html = phpQuery::newDocumentHTML($html);
-			foreach (pq("a:contains(" . htmlspecialchars($param['album']) . ")") as $item) {
-				// only get first result, when it usually be right
-				$url = pq($item)->attr('href');
-				if (!empty($url)) {
+			$doc = phpQuery::newDocumentHTML($html);
+			foreach (pq('.mxsh_ss3 a') as $item) {
+				$attrTitle = trim(pq($item)->attr('title'));
+				if (strpos($attrTitle, $param['artist']) !== false) {
+					$url = pq($item)->attr('href');
 					break;
 				}
 			}
@@ -76,20 +83,19 @@ function mojim_lyrics_hook($param) {
 			}
 
 			// get url of this song
-			$url = '';
-			$html = phpQuery::newDocumentHTML($html)->find('table.iB td');
-			foreach (pq("a:contains(" . htmlspecialchars($param['title']) . ")") as $item) {
-				// only get first result, when it usually be right
-				$url = pq($item)->attr('href');
-				if (!empty($url)) {
+			foreach (pq("a") as $item) {
+				$title = pq($item)->attr('title');
+				if (strpos($title, $param['artist']) !== false) {
+					$url = pq($item)->attr('href');
 					break;
 				}
 			}
 		}
 
-		if (empty($url)) {
-			return '';
-		}
+	}
+
+	if (empty($url)) {
+		return '';
 	}
 
 	$url = sprintf("http://mojim.com%s", $url);
@@ -98,7 +104,11 @@ function mojim_lyrics_hook($param) {
 		return '';
 	}
 
-	$doc = phpQuery::newDocumentHTML($html)->find('#fsZ dl');
+	$doc = phpQuery::newDocumentHTML($html)->find('dl dt a:contains('.$param['title'].')')->parent('dt')->next('dd');
+	if (!$doc) {
+		return '';
+	}
+	
 	//$html = $doc->find('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd');
 	//$html = pq('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd')->html();
 	//$html = $doc->find("a:contains(" . htmlspecialchars($param['title']) . ")")->parent()->next('dd');
