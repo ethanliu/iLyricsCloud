@@ -5,7 +5,7 @@
  * @author Ethan Liu <ethan@creativecrap.com>
  **/
 
-include "common.php";
+include "./common.php";
 
 $module = trim($_REQUEST['q']);
 $search = trim($_REQUEST['search']);

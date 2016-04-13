@@ -1,28 +1,25 @@
 body {
-	font: 75% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	font-family: "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 	line-height: 1.5em;
 	padding-top: 40px;
 }
 
 footer {
 	padding-top:40px;
-	border:0;
+	text-align:center;
 }
 
 .content {
 	padding:40px 0;
 }
 
-.pager .page {
-	float:right;
-	text-align:right;
-	padding-right:5px;
-}
-.pager .nav {
-	float:left;
-	padding-left:5px;
+#pagination {
+	text-align: center;
 }
 
+form label {
+	line-height:3em;
+}
 
 .hide {display:none;}
 .ellipsis {overflow:none; height:80px; width:300px; text-overflow: ellipsis;}

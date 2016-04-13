@@ -1,34 +1,22 @@
-<div class="row">
-	<div class="span3 sidebar">
-	</div>
-	<div class="span13">
+<div class="container">
+	<div style="width:30vw; margin:0 auto;">
 
 		<form method="POST" action="login.php">
 
-		<div class="clearfix">
-			<label></label>
-			<div class="input">
-				<h2 class="first">Login</h2>
-			</div>
-		</div>
+			<h2 class="first">Login</h2>
 		
-		<div class="clearfix">
-			<label>Username</label>
-			<div class="input">
-				<input type="text" name="username" class="span6" value="" placeholder="Username" required>
+			<div class="form-group">
+				<input type="text" name="username" class="form-control" value="" placeholder="Username" required>
 			</div>
-		</div>
 
-		<div class="clearfix">
-			<label>Password</label>
-			<div class="input">
-				<input type="password" name="password" class="span6" value="" placeholder="Password" required>
+			<div class="form-group">
+				<input type="password" name="password" class="form-control" value="" placeholder="Password" required>
 			</div>
-		</div>
 
-		<div class="actions">
-			<input type="submit" class="btn primary" value="Login">
-		</div>
+			<div class="form-group actions">
+				<input type="submit" class="btn btn-primary" value="Login">
+			</div>
+
 		</form>
 
 
