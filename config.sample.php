@@ -34,13 +34,15 @@ $plugins['en'] = array(
 );
 $plugins['zh'] = array(
 	'mojim',
+	'kkbox',
 );
 $plugins['jp'] = array(
 	// 'yahoojp',
-	'jpopasia',
 	'utamap',
+	'jpopasia',
 );
 $plugins['artwork'] = array(
-	'google',
+	// 'google',
+	'itunes',
 	'kkbox',
 );
