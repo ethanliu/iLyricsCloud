@@ -26,8 +26,8 @@ function metrolyrics_lyrics_hook($param) {
 		return '';
 	}
 
-	$doc = phpQuery::newDocumentHTML($html)->find('div#lyrics-body');
-	pq('span')->after('<br>');
+	$doc = phpQuery::newDocumentHTML($html)->find('#lyrics-body-text');
+	// pq('span')->after('<br>');
 	$html = strip_tags($doc->html(), '<br>');
 
 	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
