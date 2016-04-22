@@ -395,7 +395,8 @@ class LyricsFetcher extends Controller {
 				$param = array(
 					'title' => $this->title,
 					'artist' => $this->artist,
-					'album' => $this->album);
+					'album' => $this->album
+				);
 				$result = call_user_func($hook, $param);
 			}
 		}
@@ -417,7 +418,7 @@ class LyricsFetcher extends Controller {
 	}
 
 	private function parsing() {
-		$lyrics = $this->lyrics;
+		$lyrics = html_entity_decode($this->lyrics);
 		$plaintext = array();
 
 		// first check, remove <br>\n
