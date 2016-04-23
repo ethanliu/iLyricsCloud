@@ -7,7 +7,6 @@
 
 @session_start();
 require_once dirname(__FILE__) . "/../config.php";
-//include "common.php";
 include "./header.php";
 
 if (!empty($_POST['username']) && !empty($_POST['password'])) {
@@ -24,7 +23,7 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) {
 
 
 if (!isset($_SESSION['login_id'])) {
-	include "views/login-view.php";
+	include "./views/login-view.php";
 	// exit;
 }
 

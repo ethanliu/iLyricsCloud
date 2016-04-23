@@ -30,7 +30,7 @@ class DashboardModule extends Controller {
 		$m = new LyricsModule();
 		$totalLyrics = $m->numberOfRecords();
 
-		include "views/dashboard-view.php";
+		include "./views/dashboard-view.php";
 
 	}
 }
