@@ -118,12 +118,13 @@ class Controller {
 	}
 
 	public function sendTraffic($hitType = 'event', $parameters = array()) {
-		if (empty(GA_ACCOUNT)) {
+		$tid = (defined('GA_ACCOUNT') ? GA_ACCOUNT : '');
+		if (empty($tid)) {
 			return false;
 		}
 		$payload = array(
 			'v' => 1,
-			'tid' => GA_ACCOUNT,
+			'tid' => $tid,
 			'cid' => $this->rfc4122v4(),
 			't' => $hitType,
 		);
