@@ -28,6 +28,14 @@ define('ADMIN_PASS', 'admin');
 define('DATABASE_DSN', 'sqlite:' . dirname(__FILE__) . '/cache/cache.db');
 // define('DATABASE_DSN', 'mysql:host=127.0.0.1;port=3306;dbname=;user=;password=;');
 
+// OpenShift 
+// $host = getenv('OPENSHIFT_MYSQL_DB_HOST');
+// $port = getenv('OPENSHIFT_MYSQL_DB_PORT');
+// $dbname = getenv('OPENSHIFT_APP_NAME');
+// $user = getenv('OPENSHIFT_MYSQL_DB_USERNAME');
+// $passwd = getenv('OPENSHIFT_MYSQL_DB_PASSWORD');
+// define('DATABASE_DSN', "mysql:host={$host};port={$port};dbname={$dbname};user={$user};password={$passwd};");
+
 $plugins = array();
 $plugins['en'] = array(
 	'metrolyrics',
