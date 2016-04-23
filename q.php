@@ -5,6 +5,7 @@ require_once dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
 $lang = strtolower(@trim($_REQUEST['lang']));
+$version = trim(file_get_contents("./VERSION"));
 // $token = @trim($_REQUEST['token']);
 
 if (empty($action)) {
@@ -20,6 +21,8 @@ $fetcher->lyricsId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 $fetcher->title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $fetcher->artist = isset($_REQUEST['artist']) ? $_REQUEST['artist'] : '';
 $fetcher->album = isset($_REQUEST['album']) ? $_REQUEST['album'] : '';
+
+$fetcher->sendTraffic('event', array('category' => 'iLyricsCloud ' . $version, 'action' => $action, 'label' => '', 'value' => ''));
 
 switch ($action) {
 	case 'search':

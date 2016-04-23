@@ -20,6 +20,8 @@ ini_set('auto_detect_line_endings','1');
 set_time_limit(180);
 @mb_internal_encoding("UTF-8");
 
+define('GA_ACCOUNT', 'UA-402625-5');
+
 define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', 'admin');
 
