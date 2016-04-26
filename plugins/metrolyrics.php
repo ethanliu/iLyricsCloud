@@ -27,6 +27,7 @@ function metrolyrics_lyrics_hook($param) {
 	}
 
 	$doc = phpQuery::newDocumentHTML($html)->find('#lyrics-body-text');
+	pq('#mid-song-discussion')->remove();
 	// pq('span')->after('<br>');
 	$html = strip_tags($doc->html(), '<br>');
 
