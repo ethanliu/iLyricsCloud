@@ -49,6 +49,7 @@ $plugins['zh'] = array(
 $plugins['jp'] = array(
 	// 'yahoojp',
 	'utamap',
+	'naver',
 	'jpopasia',
 );
 $plugins['artwork'] = array(
