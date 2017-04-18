@@ -15,6 +15,7 @@ function mojim_lyrics_hook($param) {
 	if ($param['album'] != '') {
 		// t2 for album
 		$url = sprintf("http://mojim.com/%s.html?t2", urlencode($param['album']));
+		// fb($url);
 		$html = $curl->get($url);
 		if (empty($html)) {
 			return '';
@@ -45,13 +46,36 @@ function mojim_lyrics_hook($param) {
 		if (!$doc) {
 			return '';
 		}
-		
+
 		// [title*=artist]
 		foreach (pq("a") as $item) {
 			$title = pq($item)->attr('title');
 			if (strpos($title, $param['artist']) !== false) {
 				$url = pq($item)->attr('href');
 				break;
+			}
+		}
+
+		if (!empty($url)) {
+			$url = sprintf("http://mojim.com%s", $url);
+			$html = $curl->get($url);
+			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+			if (empty($html)) {
+				return '';
+			}
+
+			$doc = phpQuery::newDocumentHTML($html)->find("td");
+			if (!$doc) {
+				return '';
+			}
+
+			// get url of this song
+			foreach (pq("a") as $item) {
+				$title = pq($item)->attr('title');
+				if (strpos($title, $param['title']) !== false) {
+					$url = pq($item)->attr('href');
+					break;
+				}
 			}
 		}
 	}
@@ -104,11 +128,14 @@ function mojim_lyrics_hook($param) {
 		return '';
 	}
 
-	$doc = phpQuery::newDocumentHTML($html)->find('dl dt a:contains('.$param['title'].')')->parent('dt')->next('dd');
+	// $doc = phpQuery::newDocumentHTML($html)->find('dl dt a:contains('.$param['title'].')')->parent('dt')->next('dd');
+	$doc = phpQuery::newDocumentHTML($html)->find('#fsZx3');
 	if (!$doc) {
 		return '';
 	}
-	
+
+	// fb($doc->html());
+
 	//$html = $doc->find('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd');
 	//$html = pq('a[title="歌詞'.$param['title'].'"]')->parent()->next('dd')->html();
 	//$html = $doc->find("a:contains(" . htmlspecialchars($param['title']) . ")")->parent()->next('dd');
