@@ -1,3 +1,9 @@
+<?php
+if (!file_exists("./config.php")) {
+	die("Please create config.php first.");
+}
+include "./config.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,11 +30,12 @@
 				<option value="lyrics">Lyrics</option>
 				<option value="artwork">Artworks</option>
 			</select><br>
-			<label>Lang:</label>
-			<select name="lang" class="form-control">
-				<option value="en">International</option>
-				<option value="zh">Mandarin</option>
-				<option value="jp">Japanese/Korean</option>
+			<label>Source:</label>
+			<select name="source" class="form-control">
+				<option value=""></option>
+				<?php foreach ($plugins['lyrics'] as $source): ?>
+				<option value="<?php echo htmlspecialchars($source); ?>"><?php echo $source; ?></option>
+				<?php endforeach; ?>
 			</select><br>
 			<label>Title:</label>
 			<input type="text" name="title" class="form-control" value=""><br>
@@ -61,18 +68,20 @@ $(function() {
 	$("#submit").click(function() {
 		$("#console").text('Searching...');
 		$("#lrc").val('');
-		
+
+		var action = $("select[name='action'] option:selected").val();
+		var source = $("select[name='source'] option:selected").val();
 		var title = $("input[name='title']").val();
 		var artist = $("input[name='artist']").val();
 		var album = $("input[name='album']").val();
-		
+
 		if ((title + artist + album) === '') {
 			return false;
 		}
-		
-		var url = "q.php?";
-		url += "&action=" + $("select[name='action'] option:selected").val();
-		url += "&lang=" + $("select[name='lang'] option:selected").val();
+
+		var url = "q.php?demo";
+		url += "&action=" + action;
+		url += "&source=" + source;
 		url += "&title=" + title;
 		url += "&artist=" + artist;
 		url += "&album=" + album;
@@ -91,8 +100,11 @@ $(function() {
 				if (link === '') {
 					error += 'Not found.';
 				}
+				else {
+					error += '<img src="' + link + '" width="100">';
+				}
 			}
-			$("#console").text(error);
+			$("#console").html(error);
 		}, 'json');
 	});
 })

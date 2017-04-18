@@ -14,7 +14,7 @@ class LyricsFetcher extends Controller {
 	public $lyricsId = 0;
 	public $lyrics = '';
 	public $lyricsSource = '';
-	public $cache = TRUE;
+	// public $cache = TRUE;
 
 	private $plugins = array();
 	private $_stripped = FALSE;
@@ -60,7 +60,7 @@ class LyricsFetcher extends Controller {
 		exit;
 	}
 
-	public function artwork() {
+	public function artwork($source) {
 		$this->stripStrings();
 
 		if ($this->album == '' || $this->artist == '') {
@@ -69,16 +69,17 @@ class LyricsFetcher extends Controller {
 
 		$url = $this->getArtwork();
 		if (empty($url)) {
-			//$plugins = explode('|', $this->plugins['artwork']);
-			foreach ($this->plugins['artwork'] as $plugin) {
-				$url = $this->executePlugin('artwork', $plugin);
-				if (!empty($url)) {
-					$this->setArtwork($url);
-					break;
-				}
+			// foreach ($this->plugins['artwork'] as $plugin) {
+			// 	$url = $this->executePlugin('artwork', $plugin);
+			// 	if (!empty($url)) {
+			// 		$this->setArtwork($url);
+			// 		break;
+			// 	}
+			// }
+			$url = $this->executePlugin('artwork', $source);
+			if (!empty($url)) {
+				$this->setArtwork($url);
 			}
-			//$url = $this->executePlugin($this->plugins['artwork']);
-			//$this->setArtwork($url);
 		}
 		return $url;
 	}
@@ -88,29 +89,27 @@ class LyricsFetcher extends Controller {
 		$this->stripStrings();
 
 		if ((empty($this->title) || strlen($this->artist . $this->album) <= 0) && empty($this->lyricsId)) {
-			return;
+			return '';
 		}
 
-		if (!empty($this->plugins[$source])) {
+		if (in_array($source, $this->plugins['lyrics'])) {
+			// $this->lyrics = $this->getLyrics($source);
 			$this->lyrics = $this->getLyrics();
 
 			if (empty($this->lyrics) && empty($this->lyricsId)) {
-				//count($this->plugins[$source])
-				//$plugins = explode('|', $this->plugins[$source]);
-				//$this->plugins[$source][array_rand($this->plugins[$source], 1)];
-				foreach ($this->plugins[$source] as $plugin) {
-					$this->lyrics = $this->executePlugin('lyrics', $plugin);
-					if (!empty($this->lyrics)) {
-						$this->parsing();
-						$this->saveLyrics($this->lyrics);
-						break;
-					}
+				// foreach ($this->plugins['lyrics'][$source] as $plugin) {
+				// 	$this->lyrics = $this->executePlugin('lyrics', $plugin);
+				// 	if (!empty($this->lyrics)) {
+				// 		$this->parsing();
+				// 		$this->saveLyrics($this->lyrics);
+				// 		break;
+				// 	}
+				// }
+				$this->lyrics = $this->executePlugin('lyrics', $source);
+				if (!empty($this->lyrics)) {
+					$this->parsing();
+					$this->saveLyrics($this->lyrics);
 				}
-				//$this->lyrics = $this->executePlugin($this->plugins[$source]);
-				//if (!empty($this->lyrics)) {
-				//	$this->parsing();
-				//	$this->setLyrics();
-				//}
 			}
 			else {
 				$this->parsing();
@@ -118,6 +117,11 @@ class LyricsFetcher extends Controller {
 			//$this->output();
 			return $this->lyrics;
 		}
+		else {
+			// fb("Unknown source: {$source}");
+		}
+
+		return '';
 	}
 
 	public function search() {
@@ -251,7 +255,7 @@ class LyricsFetcher extends Controller {
 		$this->db_execute($stmt);
 	}
 
-	private function getLyrics() {
+	private function getLyrics($source = '') {
 		if (!$this->db) {
 			return '';
 		}
@@ -264,20 +268,24 @@ class LyricsFetcher extends Controller {
 			$result = $this->db_getRow($stmt);
 		}
 		else {
-			if (!$this->cache) {
-				return '';
-			}
+			// if (!$this->cache) {
+			// 	return '';
+			// }
 			$query = '';
-			$query .= ' AND UPPER(lang) LIKE UPPER(:lang)';
+			$query .= !empty($source) ? ' AND UPPER(lang) LIKE UPPER(:lang)' : '';
 			$query .= !empty($this->title) ? ' AND UPPER(title) LIKE UPPER(:title)' : '';
 			$query .= !empty($this->artist) ? ' AND UPPER(artist) LIKE UPPER(:artist)' : '';
 			$query .= !empty($this->album) ? ' AND UPPER(album) LIKE UPPER(:album)' : '';
 
 			$sql = "SELECT lang, title, artist, album, lyrics FROM lyrics WHERE (1=1) " . $query . " ORDER BY created DESC LIMIT 1";
-			//var_dump($sql);
 			$stmt = $this->db_prepare($sql);
-			$stmt->bindParam(":lang", $this->lyricsSource);
+			// fb($sql);
+			// fb($stmt);
 
+			// $stmt->bindParam(":lang", $this->lyricsSource);
+			if (!empty($source)) {
+				$stmt->bindParam(":lang", $source);
+			}
 			if (!empty($this->title)) {
 				$stmt->bindParam(":title", $this->title);
 			}

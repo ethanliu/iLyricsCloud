@@ -4,16 +4,16 @@ header("Content-type: application/json");
 require_once dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
-$lang = strtolower(@trim($_REQUEST['lang']));
+$source = strtolower(@trim($_REQUEST['source']));
 $version = trim(file_get_contents("./VERSION"));
 // $token = @trim($_REQUEST['token']);
 
 if (empty($action)) {
 	die('{"error":"Not available"}');
 }
-if (empty($lang) && !in_array($action, array('artwork'))) {
-	die('{"error":"Not available"}');
-}
+// if (empty($lang) && !in_array($action, array('artwork'))) {
+// 	die('{"error":"Not available"}');
+// }
 
 $fetcher = new LyricsFetcher($plugins);
 $fetcher->cache = false;
@@ -30,15 +30,31 @@ switch ($action) {
 		$fetcher->output();
 		break;
 	case 'lyrics':
-		$result = $fetcher->lyrics($lang);
+		if (empty($source) || !in_array($source, $plugins['lyrics'])) {
+			foreach ($plugins['lyrics'] as $source) {
+				$lyrics = $fetcher->lyrics($source);
+				if (!empty($lyrics)) {
+					break;
+				}
+			}
+		}
+		else {
+			$lyrics = $fetcher->lyrics($source);
+		}
 		$fetcher->output();
 		break;
 	case 'artwork':
-		$url = $fetcher->artwork();
 		$result = array(
 			'error' => '',
 			'url' => $url
 		);
+		foreach ($plugins['artworks'] as $source) {
+			$url = $fetcher->artwork($source);
+			if (!empty($url)) {
+				$result['url'] = $url;
+				break;
+			}
+		}
 		echo json_encode($result);
 		break;
 }
