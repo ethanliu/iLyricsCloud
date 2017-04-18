@@ -16,6 +16,7 @@ ini_set('magic_quotes_gpc', 0);
 ini_set('magic_quotes_sybase', 0);
 ini_set('url_rewriter.tags', '');
 ini_set('auto_detect_line_endings','1');
+// php_value always_populate_raw_post_data -1
 
 set_time_limit(180);
 @mb_internal_encoding("UTF-8");
@@ -28,7 +29,7 @@ define('ADMIN_PASS', 'admin');
 define('DATABASE_DSN', 'sqlite:' . dirname(__FILE__) . '/cache/cache.db');
 // define('DATABASE_DSN', 'mysql:host=127.0.0.1;port=3306;dbname=;user=;password=;');
 
-// OpenShift 
+// OpenShift
 // $host = getenv('OPENSHIFT_MYSQL_DB_HOST');
 // $port = getenv('OPENSHIFT_MYSQL_DB_PORT');
 // $dbname = getenv('OPENSHIFT_APP_NAME');
@@ -37,22 +38,18 @@ define('DATABASE_DSN', 'sqlite:' . dirname(__FILE__) . '/cache/cache.db');
 // define('DATABASE_DSN', "mysql:host={$host};port={$port};dbname={$dbname};user={$user};password={$passwd};");
 
 $plugins = array();
-$plugins['en'] = array(
+$plugins['lyrics'] = array(
 	'metrolyrics',
 	'lyricscom',
 	'lyricswiki',
-);
-$plugins['zh'] = array(
 	'mojim',
 	'kkbox',
-);
-$plugins['jp'] = array(
 	// 'yahoojp',
 	'utamap',
 	'naver',
 	'jpopasia',
 );
-$plugins['artwork'] = array(
+$plugins['artworks'] = array(
 	// 'google',
 	'itunes',
 	'kkbox',
