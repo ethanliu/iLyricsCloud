@@ -1,6 +1,7 @@
 <?php
 // Requried for AFNetwork Framework over iOS devices
 header("Content-type: application/json");
+require_once dirname(__FILE__) . "/config.php";
 require_once dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
@@ -10,6 +11,14 @@ $version = trim(file_get_contents("./VERSION"));
 
 if (empty($action)) {
 	die('{"error":"Not available"}');
+}
+else if ($action === 'plugins') {
+	$name = strtolower(@trim($_REQUEST['name']));
+	if (!empty($name) && isset($plugins[$name])) {
+		echo json_encode($plugins[$name]);
+		exit;
+	}
+	die('[]');
 }
 // if (empty($lang) && !in_array($action, array('artwork'))) {
 // 	die('{"error":"Not available"}');
