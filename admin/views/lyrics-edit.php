@@ -12,11 +12,12 @@
 	</fieldset>
 
 	<div class="control-group">
-		<label class="control-label">Lang</label>
+		<label class="control-label">Source</label>
 		<select name="lang" class="form-control">
-			<option value="en" <?php if ($result['lang'] == 'en') { echo 'selected'; } ?>>en</option>
-			<option value="zh" <?php if ($result['lang'] == 'zh') { echo 'selected'; } ?>>zh</option>
-			<option value="jp" <?php if ($result['lang'] == 'jp') { echo 'selected'; } ?>>jp</option>
+				<option value=""></option>
+				<?php foreach ($plugins['lyrics'] as $source): ?>
+				<option value="<?php echo htmlspecialchars($source); ?>" <?php if ($source === $result['lang']): ?>selected<?php endif; ?>><?php echo $source; ?></option>
+				<?php endforeach; ?>
 		</select>
 	</div>
 
