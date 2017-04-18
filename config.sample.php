@@ -11,13 +11,6 @@ require_once dirname(__FILE__) . '/libs/phpQuery.php';
 // error_reporting(E_ALL);
 ini_set("display_errors", 0);
 
-ini_set('magic_quotes_runtime', 0);
-ini_set('magic_quotes_gpc', 0);
-ini_set('magic_quotes_sybase', 0);
-ini_set('url_rewriter.tags', '');
-ini_set('auto_detect_line_endings','1');
-// php_value always_populate_raw_post_data -1
-
 set_time_limit(180);
 @mb_internal_encoding("UTF-8");
 
@@ -47,7 +40,7 @@ $plugins['lyrics'] = array(
 	// 'yahoojp',
 	'utamap',
 	'naver',
-	'jpopasia',
+	// 'jpopasia',
 );
 $plugins['artworks'] = array(
 	// 'google',

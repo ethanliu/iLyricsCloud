@@ -28,7 +28,7 @@ include "./config.php";
 			<label>Target:</label>
 			<select name="action" class="form-control">
 				<option value="lyrics">Lyrics</option>
-				<option value="artwork">Artworks</option>
+				<option value="artwork">Artwork</option>
 			</select><br>
 			<label>Source:</label>
 			<select name="source" class="form-control">
