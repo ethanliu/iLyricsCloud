@@ -46,6 +46,12 @@ switch ($module) {
 		$m->install();
 		break;
 
+	case 'upgrade':
+		include "./modules/upgrade.php";
+		$m = new UpgradeModule();
+		$m->upgrade($action);
+		break;
+
 	default:
 		$module = "dashboard";
 		include "./modules/dashboard.php";

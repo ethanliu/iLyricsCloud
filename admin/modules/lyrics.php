@@ -18,6 +18,22 @@ class LyricsModule extends Controller {
 		$this->db_connect();
 	}
 
+	public function upgrade($version = '') {
+		$version = trim(file_get_contents(dirname(__FILE__) . "/../../VERSION"));
+		$upgrade = '';
+
+		if ($version === '2.1.0') {
+			$sql = "SELECT COUNT(*) AS total FROM lyrics WHERE lang = 'en' OR lang = 'jp' OR lang = 'zh' GROUP BY lang";
+			$stmt = $this->db_prepare($sql);
+			$total = $this->db_getOne($stmt);
+			if ($total) {
+				$upgrade = $version;
+			}
+		}
+
+		return $upgrade;
+	}
+
 	public function records($page = 1) {
 		$pages = $this->numberOfPages;
 		$page = ($page > $pages) ? $pages : (($page < 1) ? 1 : $page);

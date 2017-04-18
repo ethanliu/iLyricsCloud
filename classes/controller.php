@@ -128,13 +128,13 @@ class Controller {
 			'cid' => $this->rfc4122v4(),
 			't' => $hitType,
 		);
-		
+
 		if ($hitType === 'event') {
 			$payload['ec'] = $parameters['category'];
 			$payload['ea'] = $parameters['action'];
 			$payload['el'] = $parameters['label'];
 			$payload['ev'] = $parameters['value'];
-			
+
 			if (empty($payload['ec']) || empty($payload['ea'])) {
 				return false;
 			}
@@ -144,13 +144,13 @@ class Controller {
 			$payload['dp'] = $parameters['page'];
 			$payload['dt'] = $parameters['title'];
 		}
-		
+
 		$query = http_build_query($payload);
 		$api = "https://www.google-analytics.com/collect?";
 		// fb($api . $query);
 		file_get_contents($api . $query);
 	}
-	
+
 	private function rfc4122v4() {
 		$uuid = isset($_COOKIE["ilyrics_uuid"]) ? $_COOKIE["ilyrics_uuid"] : '';
 		if (empty($uuid)) {
