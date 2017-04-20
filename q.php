@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . "/config.php";
 require_once dirname(__FILE__) . "/classes/ilyrics.php";
 
 $action = strtolower(@trim($_REQUEST['action']));
-$source = strtolower(@trim($_REQUEST['source']));
+$plugin = strtolower(@trim($_REQUEST['plugin']));
 $version = trim(file_get_contents("./VERSION"));
 // $token = @trim($_REQUEST['token']);
 
@@ -39,16 +39,16 @@ switch ($action) {
 		$fetcher->output();
 		break;
 	case 'lyrics':
-		if (empty($source) || !in_array($source, $plugins['lyrics'])) {
-			foreach ($plugins['lyrics'] as $source) {
-				$lyrics = $fetcher->lyrics($source);
+		if (empty($plugin) || !in_array($plugin, $plugins['lyrics'])) {
+			foreach ($plugins['lyrics'] as $plugin) {
+				$lyrics = $fetcher->lyrics($plugin);
 				if (!empty($lyrics)) {
 					break;
 				}
 			}
 		}
 		else {
-			$lyrics = $fetcher->lyrics($source);
+			$lyrics = $fetcher->lyrics($plugin);
 		}
 		$fetcher->output();
 		break;
@@ -57,8 +57,8 @@ switch ($action) {
 			'error' => '',
 			'url' => $url
 		);
-		foreach ($plugins['artworks'] as $source) {
-			$url = $fetcher->artwork($source);
+		foreach ($plugins['artworks'] as $plugin) {
+			$url = $fetcher->artwork($plugin);
 			if (!empty($url)) {
 				$result['url'] = $url;
 				break;
