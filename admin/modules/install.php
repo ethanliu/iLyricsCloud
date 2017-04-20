@@ -85,7 +85,7 @@ class InstallModule extends Controller {
 		$sql = "CREATE TABLE IF NOT EXISTS `lyrics` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
 				`created` int(11) NOT NULL,
-				`lang` varchar(10) NOT NULL,
+				`lang` varchar(40) NOT NULL,
 				`title` varchar(255) NOT NULL,
 				`artist` varchar(255) NOT NULL,
 				`album` varchar(255) NOT NULL,
@@ -120,7 +120,7 @@ class InstallModule extends Controller {
 			$sql = "CREATE TABLE lyrics (
 					id integer PRIMARY KEY DEFAULT nextval('lyrics_id_seq'),
 					created integer,
-					lang varchar(10) NOT NULL,
+					lang varchar(40) NOT NULL,
 					title varchar(255),
 					artist varchar(255),
 					album varchar(255),

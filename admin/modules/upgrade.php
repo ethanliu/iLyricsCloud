@@ -1,6 +1,6 @@
 <?php
 /**
- * Install module
+ * Upgrade module
  *
  * @author Ethan Liu <ethan@creativecrap.com>
  **/
@@ -16,17 +16,24 @@ class UpgradeModule extends Controller {
 
 	public function upgrade($version) {
 
-		$sql = "UPDATE lyrics SET lang = 'metrolyrics' WHERE lang = 'en'";
-		$stmt = $this->db_prepare($sql);
-		$result = $this->db_execute($stmt);
+		if ($version === '2.1.0') {
+			$sql = "ALTER TABLE `lyrics` CHANGE `lang` `lang` VARCHAR(30);";
+			$stmt = $this->db_prepare($sql);
+			$result = $this->db_execute($stmt);
 
-		$sql = "UPDATE lyrics SET lang = 'mojim' WHERE lang = 'zh'";
-		$stmt = $this->db_prepare($sql);
-		$result = $this->db_execute($stmt);
+			$sql = "UPDATE lyrics SET lang = 'metrolyrics' WHERE lang = 'en'";
+			$stmt = $this->db_prepare($sql);
+			$result = $this->db_execute($stmt);
 
-		$sql = "UPDATE lyrics SET lang = 'utamap' WHERE lang = 'jp'";
-		$stmt = $this->db_prepare($sql);
-		$result = $this->db_execute($stmt);
+			$sql = "UPDATE lyrics SET lang = 'mojim' WHERE lang = 'zh'";
+			$stmt = $this->db_prepare($sql);
+			$result = $this->db_execute($stmt);
+
+			$sql = "UPDATE lyrics SET lang = 'utamap' WHERE lang = 'jp'";
+			$stmt = $this->db_prepare($sql);
+			$result = $this->db_execute($stmt);
+		}
+
 
 		echo "Upgrade {$version} successed.";
 		exit;
