@@ -1,4 +1,7 @@
+RewriteOptions inherit
+
 AddDefaultCharset UTF-8
+Options +FollowsymLinks
 
 php_value magic_quotes_runtime 0
 php_value magic_quotes_gpc 0
@@ -6,3 +9,6 @@ php_value magic_quotes_sybase 0
 php_value url_rewriter.tags none
 php_value auto_detect_line_endings 1
 php_value always_populate_raw_post_data -1
+
+RewriteEngine On
+RewriteRule ^q/?$ q.php%{REQUEST_URI}
