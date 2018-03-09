@@ -27,14 +27,12 @@ function metrolyrics_lyrics_hook($param) {
 	}
 
 	$doc = phpQuery::newDocumentHTML($html)->find('#lyrics-body-text');
-	pq('#mid-song-discussion')->remove();
-	// pq('span')->after('<br>');
+	pq("#mid-song-discussion, .driver-related, .driver-photos, .img-wrap, a")->remove();
 	$html = strip_tags($doc->html(), '<br>');
 
 	if (strpos($html, "Unfortunately, we don't have the lyrics") !== false) {
 		return '';
 	}
-
 
 	return $html;
 }
