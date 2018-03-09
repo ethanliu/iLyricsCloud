@@ -14,11 +14,11 @@ iLyricsCloud requires a web server runs PHP 5 and above, a database or sqlite is
 
 1. Download and unzip source.  
 1. Create a database on your server, skip if choose SQLite.  
-1. Create a "cache" directory if not exists, and make sure the cache folder is writable.  
+1. Create a directory "`cache`" if not exists, and make sure the cache directory is writable.  
 1. Rename or copy config.sample.php to config.php.  
-1. Change DATABASE_DSN to matches your choice.  
-1. Change ADMIN_USER and ADMIN_PASS to something more secure.  
-1. Open ilyrics-cloud/admin/ in browser, click install database.  
+1. Change `DATABASE_DSN` to matches your choice.  
+1. Change `ADMIN_USER` and `ADMIN_PASS` to something more secure.  
+1. Open `ilyrics-cloud/admin/` in browser, click install database.  
 1. Click Search from navigation, have a search test see if anything works.  
 
 ## Plugins
@@ -27,28 +27,33 @@ Plugin is the fetcher for lyrics or artworks, it does access data from provider 
 
 ### current available plugins:
 
-google - Google images for artwork  
-jpopasia - Japanese and Korean lyrics  
-kkbox - Artworks  
-lyricscom - English lyrics  
-lyricswiki - English lyrics  
-metrolyrics - English lyrics  
-mojim -  Chinese lyrics  
-utamap - Japanese lyrics  
-yahoojp - Japanese lyrics  
+`google` - Google images for artwork  
+`jpopasia` - Japanese and Korean lyrics  
+`kkbox` - Artworks  
+`lyricscom` - English lyrics  
+`lyricswiki` - English lyrics  
+`metrolyrics` - English lyrics  
+`mojim` -  Chinese lyrics  
+`utamap` - Japanese lyrics  
+`yahoojp` - Japanese lyrics  
 
 
 ### Plugin Guideline
 
 Only two function would be called from iLyrics Class, with special function name.
 
-{pluginName}\_lyrics_hook()  
+`{pluginName}\_lyrics_hook()`  
 return lyrics as string.
 
-{pluginName}\_artwork_hook()  
+`{pluginName}\_artwork_hook()`  
 return image url as string.
 
 To active a plugin, after put the file in plugins folder, you must add the plugin to into $plugins from config.php file.
+
+
+### Usage
+
+To make iLyricsCloud as a service, use `q` for api endpoint, i.e. `http://example.com/ilyrics-cloud/q/`
 
 ## License
 
