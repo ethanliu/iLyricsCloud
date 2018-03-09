@@ -444,7 +444,8 @@ class LyricsFetcher extends Controller {
 		}
 
 		// uniform line-break
-		$lyrics = preg_replace('#(\\r\\n|\\r|\\n)#', "\n", $lyrics);
+		// $lyrics = preg_replace('#(\\r\\n|\\r|\\n)#', "\n", $lyrics);
+		$lyrics = preg_replace("/(\r?\n)/", "\n", $lyrics);
 		$rows = explode("\n", $lyrics);
 		$loop = count($rows);
 
@@ -458,7 +459,9 @@ class LyricsFetcher extends Controller {
 			}
 		}
 
-		$lyrics = implode("\n", $plaintext);
+		$lyrics = implode("\n", trim($plaintext));
+		// remove multiple line breaks
+		$lyrics = preg_replace("/(\r?\n){2,}/", "\n\n", $lyrics);
 		$this->lyrics = trim($lyrics);
 	}
 

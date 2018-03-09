@@ -7,9 +7,9 @@
 
 include "././common.php";
 
-$module = trim($_REQUEST['q']);
-$search = trim($_REQUEST['search']);
-$action = trim($_REQUEST['action']);
+$module = isset($_REQUEST['q']) ? trim($_REQUEST['q']) : '';
+$search = isset($_REQUEST['search']) ? trim($_REQUEST['search']) : '';
+$action = isset($_REQUEST['action']) ? trim($_REQUEST['action']) : '';
 
 if ($action !== 'set') {
 	include "./header.php";
