@@ -1,4 +1,4 @@
 .DS_Store
 config.php
-cache/INSTALL
+cache/INSTALLED
 cache/cache.db
